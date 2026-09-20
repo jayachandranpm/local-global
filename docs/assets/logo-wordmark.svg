@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 80" fill="none">
+  <!--
+    Local Global — Full Logo (mark + wordmark)
+    For use in nav bars, headers, footers, README, etc.
+  -->
+  <defs>
+    <linearGradient id="w-ring1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="w-ring2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="w-ring3" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6EE7B7" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.12"/>
+    </linearGradient>
+    <linearGradient id="w-core" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ── Mark ── -->
+  <g transform="translate(8, 8)">
+    <!-- Outer ring -->
+    <ellipse cx="32" cy="32" rx="28" ry="10.5" transform="rotate(-30 32 32)"
+      stroke="url(#w-ring3)" stroke-width="1" fill="none"/>
+    <!-- Middle ring -->
+    <ellipse cx="32" cy="32" rx="24" ry="9.5" transform="rotate(25 32 32)"
+      stroke="url(#w-ring2)" stroke-width="1.3" fill="none"/>
+    <!-- Inner ring -->
+    <ellipse cx="32" cy="32" rx="20" ry="8.5" transform="rotate(-55 32 32)"
+      stroke="url(#w-ring1)" stroke-width="1.8" fill="none"/>
+    <!-- Core -->
+    <circle cx="32" cy="32" r="6.5" fill="#10B981" opacity="0.15"/>
+    <circle cx="32" cy="32" r="5" fill="url(#w-core)"/>
+    <circle cx="31" cy="31" r="2" fill="#6EE7B7" opacity="0.45"/>
+    <!-- Satellites -->
+    <circle cx="49" cy="14" r="2" fill="#34D399"/>
+    <circle cx="49" cy="14" r="1.1" fill="#6EE7B7"/>
+    <circle cx="14" cy="49" r="1.5" fill="#10B981"/>
+    <circle cx="14" cy="49" r="0.8" fill="#34D399"/>
+  </g>
+
+  <!-- ── Wordmark ── -->
+  <text x="88" y="38" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="26" font-weight="700" letter-spacing="-0.5" fill="#EDEDED">
+    Local
+  </text>
+  <text x="88" y="62" font-family="'JetBrains Mono', 'SF Mono', 'Fira Code', monospace"
+    font-size="18" font-weight="500" letter-spacing="0.5" fill="#10B981">
+    Global
+  </text>
+</svg>

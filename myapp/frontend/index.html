@@ -1,0 +1,5455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local Global</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Markdown Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Code Syntax Highlighting -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css" />
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <!-- Alpine.js (deferred) -->
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Our Alpine logic -->
+  <script src="/static/app.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --sidebar-bg: #f9f9f9;
+      --text-primary: #000000;
+      --text-secondary: #666666;
+      --input-bg: #f4f4f4;
+      --border-color: #e5e5e5;
+      --accent-color: #000000;
+      --hover-bg: #eaeaea;
+    }
+
+    /* ── Dark theme ──────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg-color: #171717;
+      --sidebar-bg: #0f0f0f;
+      --text-primary: #e5e5e5;
+      --text-secondary: #a3a3a3;
+      --input-bg: #262626;
+      --border-color: #333333;
+      --accent-color: #e5e5e5;
+      --hover-bg: #262626;
+    }
+
+    [data-theme="dark"] .modal-box,
+    [data-theme="dark"] .modal-dialog {
+      background: #1e1e1e;
+    }
+
+    [data-theme="dark"] .message-content pre,
+    [data-theme="dark"] .message-content code {
+      background: #262626;
+    }
+
+    [data-theme="dark"] .message-content pre code.hljs {
+      background: #262626;
+    }
+
+    [data-theme="dark"] .message-avatar {
+      background: #e5e5e5;
+      color: #171717;
+    }
+
+    [data-theme="dark"] .message-avatar.user-avatar {
+      background: #333;
+      color: #e5e5e5;
+    }
+
+    [data-theme="dark"] .search-progress {
+      background: #1e1e1e;
+      border-color: #333;
+    }
+
+    [data-theme="dark"] .search-progress-header {
+      color: #e5e5e5;
+    }
+
+    [data-theme="dark"] .search-step.active {
+      color: #e5e5e5;
+    }
+
+    [data-theme="dark"] .step-icon.pending {
+      background: #262626;
+      border-color: #444;
+    }
+
+    [data-theme="dark"] .step-icon.active {
+      background: #1e3a5f;
+      border-color: #2563eb;
+    }
+
+    [data-theme="dark"] .step-icon.done {
+      background: #14332a;
+      border-color: #16a34a;
+    }
+
+    [data-theme="dark"] .toast-notification {
+      background: #e5e5e5;
+      color: #171717;
+    }
+
+    [data-theme="dark"] .toast-notification.error {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    [data-theme="dark"] .model-card {
+      background: #1e1e1e;
+    }
+
+    [data-theme="dark"] .stat-card {
+      background: #1e1e1e;
+    }
+
+    [data-theme="dark"] .session-bar .sb-cell {
+      background: #1e1e1e;
+    }
+
+    [data-theme="dark"] .template-card {
+      background: #1e1e1e;
+      border-color: #333;
+    }
+
+    [data-theme="dark"] .template-card:hover {
+      background: rgba(139, 92, 246, 0.08);
+      border-color: var(--accent-color);
+    }
+
+    [data-theme="dark"] .code-copy-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #aaa;
+    }
+
+    [data-theme="dark"] .code-copy-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #e5e5e5;
+    }
+
+    [data-theme="dark"] .send-btn {
+      background: #e5e5e5;
+      color: #171717;
+    }
+
+    [data-theme="dark"] .send-btn:hover {
+      background: #fff;
+    }
+
+    [data-theme="dark"] .send-btn:disabled {
+      background: #333;
+      color: #666;
+    }
+
+    [data-theme="dark"] .settings-danger-zone {
+      background: linear-gradient(135deg, #2a1515, #1e1010);
+      border-color: #5c2020;
+    }
+
+    [data-theme="dark"] .settings-danger-zone .settings-section-title {
+      color: #f87171;
+      border-bottom-color: #5c2020;
+    }
+
+    [data-theme="dark"] .stop-btn {
+      background: #1e1e1e;
+      border-color: #444;
+    }
+
+    [data-theme="dark"] .stop-btn:hover {
+      background: #3a1c1c;
+      border-color: #dc2626;
+    }
+
+    [data-theme="dark"] .message-content th,
+    [data-theme="dark"] .message-content td {
+      border-color: #444;
+    }
+
+    [data-theme="dark"] .message-content blockquote {
+      border-left-color: #555;
+    }
+
+    [data-theme="dark"] .message-content a {
+      color: #60a5fa;
+    }
+
+    [data-theme="dark"] .input-wrapper {
+      background: linear-gradient(to top, var(--bg-color) 70%, transparent);
+    }
+
+    [data-theme="dark"] .new-chat-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    [data-theme="dark"] .search-active-banner {
+      background: rgba(37, 99, 235, 0.12);
+      border-color: rgba(37, 99, 235, 0.25);
+    }
+
+    [data-theme="dark"] .rag-active-banner {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: rgba(139, 92, 246, 0.25);
+    }
+
+    [data-theme="dark"] .rag-citations {
+      background: #1e1e1e;
+    }
+
+    [data-theme="dark"] .rag-citation-full {
+      background: #262626;
+      border-color: #444;
+    }
+
+    [data-theme="dark"] .thinking-block {
+      background: rgba(167, 139, 250, 0.08);
+      border-color: rgba(167, 139, 250, 0.2);
+    }
+
+    [data-theme="dark"] .thinking-content {
+      border-top-color: rgba(167, 139, 250, 0.12);
+    }
+
+    [data-theme="dark"] .conv-tag {
+      background: #333;
+      color: #ccc;
+    }
+
+    [data-theme="dark"] .modal-close {
+      background: #333;
+      color: #ccc;
+    }
+
+    [data-theme="dark"] .modal-close:hover {
+      background: #444;
+      color: #e5e5e5;
+    }
+
+    [data-theme="dark"] .persona-badge {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: rgba(139, 92, 246, 0.25);
+    }
+
+    [data-theme="dark"] .template-quick-btn {
+      background: #262626;
+      border-color: #444;
+      color: #ccc;
+    }
+
+    [data-theme="dark"] .template-quick-btn:hover {
+      background: rgba(139, 92, 246, 0.12);
+    }
+
+    [data-theme="dark"] .search-match-preview .match-count {
+      background: rgba(139, 92, 246, 0.15);
+      color: #c4b5fd;
+    }
+
+    [data-theme="dark"] .export-menu {
+      background: #1e1e1e;
+      border-color: #333;
+    }
+
+    [data-theme="dark"] .export-menu button {
+      color: #e5e5e5;
+    }
+
+    [data-theme="dark"] .export-menu button:hover {
+      background: #262626;
+    }
+
+    [data-theme="dark"] .ws-status {
+      background: #262626;
+    }
+
+    [data-theme="dark"] .pull-progress-bar {
+      background: #333;
+    }
+
+    [data-theme="dark"] .context-progress {
+      background: #333;
+    }
+
+    [data-theme="dark"] #chat-container::-webkit-scrollbar-thumb {
+      background: #444;
+    }
+
+    [data-theme="dark"] #chat-container::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    [data-theme="dark"] .chat-list-container::-webkit-scrollbar-thumb {
+      background: #444;
+    }
+
+    [data-theme="dark"] .drag-overlay {
+      background: rgba(139, 92, 246, 0.15);
+    }
+
+    [data-theme="dark"] .upload-progress-bar {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: rgba(139, 92, 246, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────────── */
+    #sidebar {
+      width: 260px;
+      background-color: var(--sidebar-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      transition: width 0.3s ease, padding 0.3s ease;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    #sidebar.collapsed {
+      width: 0;
+      border-right: none;
+    }
+
+    .sidebar-header {
+      padding: 10px 16px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-width: 260px;
+    }
+
+    .new-chat-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      padding: 8px 10px;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .new-chat-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    .sidebar-section-label {
+      padding: 0 16px;
+      margin-bottom: 4px;
+      font-size: 11px;
+      color: #999;
+      font-weight: 600;
+      min-width: 260px;
+    }
+
+    .sidebar-section {
+      padding: 0 12px;
+      min-width: 260px;
+    }
+
+    .sidebar-divider {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 6px 16px;
+      min-width: 228px;
+    }
+
+    /* ── Sidebar: model selector ─────────────────────────────────── */
+    .sidebar-select {
+      width: 100%;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-primary);
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .sidebar-select:focus {
+      border-color: var(--accent-color);
+    }
+
+    /* ── Sidebar: temperature slider ─────────────────────────────── */
+    .temp-slider {
+      width: 100%;
+      accent-color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    .temp-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    /* ── Sidebar: MCP server list ────────────────────────────────── */
+    .mcp-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 6px 4px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .mcp-item:hover {
+      background: var(--hover-bg);
+    }
+
+    .mcp-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+    }
+
+    .mcp-dot.stopped {
+      background: #dc2626;
+    }
+
+    .mcp-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mcp-actions {
+      display: flex;
+      gap: 2px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .mcp-item:hover .mcp-actions {
+      opacity: 1;
+    }
+
+    .mcp-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mcp-action-btn:hover {
+      background: rgba(0, 0, 0, 0.08);
+      color: var(--text-primary);
+    }
+
+    .mcp-action-btn.danger:hover {
+      color: #dc2626;
+    }
+
+    .mcp-none {
+      font-size: 13px;
+      color: #bbb;
+      font-style: italic;
+    }
+
+    .mcp-add-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      padding: 8px 10px;
+      background: transparent;
+      border: 1px dashed var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      font-family: inherit;
+      margin-top: 6px;
+    }
+
+    .mcp-add-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* ── MCP Tool items ──────────────────────────────────────────── */
+    .mcp-tool-item {
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: var(--msg-user-bg, rgba(0,0,0,0.03));
+      margin-bottom: 4px;
+      transition: background 0.15s;
+    }
+    .mcp-tool-item:hover { background: var(--hover-bg, rgba(0,0,0,0.05)); }
+    .mcp-tool-header { display:flex; align-items:center; gap:6px; }
+    .mcp-tool-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mcp-tool-server {
+      font-size: 10px;
+      color: var(--text-secondary);
+      opacity: 0.7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mcp-tool-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar scroll wrapper ─────────────────────────────────── */
+    .sidebar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(150,150,150,0.25) transparent;
+    }
+    .sidebar-scroll::-webkit-scrollbar { width: 5px; }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(150,150,150,0.25); border-radius: 4px; }
+    .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+
+    /* ── Chat list in sidebar ────────────────────────────────────── */
+    .chat-list-container {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 8px;
+    }
+
+    .chat-list-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-primary);
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .chat-list-item:hover {
+      background: var(--hover-bg);
+    }
+
+    .chat-list-item.active {
+      background: var(--hover-bg);
+      font-weight: 500;
+    }
+
+    .chat-list-item .chat-title {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .chat-list-item .chat-time {
+      font-size: 11px;
+      color: #aaa;
+      flex-shrink: 0;
+    }
+
+    .chat-list-item .chat-delete {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .chat-list-item:hover .chat-delete {
+      display: flex;
+    }
+
+    .chat-list-item:hover .chat-time {
+      display: none;
+    }
+
+    .chat-delete:hover {
+      color: #dc2626;
+    }
+
+    /* ── Context indicator ────────────────────────────────────────── */
+    .context-bar {
+      padding: 8px 16px;
+      min-width: 260px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .context-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .context-progress {
+      width: 100%;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .context-progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s, background 0.3s;
+    }
+
+    /* ── Memory panel ─────────────────────────────────────────────── */
+    .memory-panel {
+      padding: 0 12px;
+      min-width: 260px;
+    }
+
+    .memory-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding: 5px 4px;
+      border-radius: 4px;
+    }
+
+    .memory-item:hover {
+      background: var(--hover-bg);
+    }
+
+    .memory-text {
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .memory-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      color: #ccc;
+      font-size: 12px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .memory-item:hover .memory-remove {
+      opacity: 1;
+    }
+
+    .memory-remove:hover {
+      color: #dc2626;
+    }
+
+    .memory-add-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .memory-input {
+      flex: 1;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .memory-input:focus {
+      border-color: var(--accent-color);
+    }
+
+    .memory-save-btn {
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    .memory-save-btn:hover {
+      filter: brightness(0.85);
+    }
+
+    /* ── MCP Modal ────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box,
+    .modal-dialog {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      width: 420px;
+      max-width: 90vw;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-field {
+      margin-bottom: 14px;
+    }
+
+    .modal-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+
+    .modal-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--accent-color);
+    }
+
+    .modal-hint {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .modal-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .modal-btn-cancel {
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    .modal-btn-cancel:hover {
+      background: var(--hover-bg);
+    }
+
+    .modal-btn-primary {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .modal-btn-primary:hover {
+      filter: brightness(0.85);
+    }
+
+    /* ── Sidebar section header with action ───────────────────────── */
+    .sidebar-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      margin-bottom: 4px;
+      min-width: 260px;
+    }
+
+    .sidebar-section-header .label {
+      font-size: 12px;
+      color: #999;
+      font-weight: 600;
+    }
+
+    .sidebar-section-header .action-link {
+      font-size: 11px;
+      color: #999;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .sidebar-section-header .action-link:hover {
+      color: var(--text-primary);
+      background: var(--hover-bg);
+    }
+
+    /* ── Main Content ────────────────────────────────────────────── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      height: 100%;
+    }
+
+    /* ── Top nav ─────────────────────────────────────────────────── */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      background: transparent;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 6px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .icon-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    .icon-btn i {
+      font-size: 24px !important;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .model-selector-badge {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: default;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    /* ── Chat area ───────────────────────────────────────────────── */
+    #chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 80px 20px 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      scroll-behavior: smooth;
+      will-change: transform, scroll-position;
+    }
+
+    /* ── Empty state ─────────────────────────────────────────────── */
+    .empty-state {
+      margin-top: 15vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      transition: opacity 0.3s;
+    }
+
+    .spark-icon {
+      width: 80px;
+      height: 80px;
+      color: var(--text-primary);
+    }
+
+    .spark-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Empty state suggestions ────────────────────────────────── */
+    .suggestions-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 560px;
+    }
+
+    .suggestion-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-primary);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .suggestion-chip:hover {
+      border-color: var(--accent-color);
+      background: var(--hover-bg);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .suggestion-chip i {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+
+    /* ── Scroll-to-bottom FAB ─────────────────────────────────────── */
+    .scroll-fab {
+      position: absolute;
+      bottom: 150px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .scroll-fab.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .scroll-fab:hover {
+      background: var(--hover-bg);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    .scroll-fab i {
+      font-size: 20px;
+      color: var(--text-secondary);
+    }
+
+    /* ── Sidebar date group labels ───────────────────────────────── */
+    .chat-group-label {
+      padding: 6px 12px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      opacity: 0.7;
+    }
+
+    .chat-group-label:first-child {
+      padding-top: 2px;
+    }
+
+    /* ── Message timestamps ──────────────────────────────────────── */
+    .message-timestamp {
+      font-size: 11px;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      margin-top: 4px;
+    }
+
+    .generation-stopped {
+      font-size: 11px;
+      color: var(--text-secondary);
+      opacity: 0.7;
+      margin-top: 6px;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ── WebSocket connection indicator ──────────────────────────── */
+    .ws-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: var(--input-bg);
+      transition: all 0.3s;
+    }
+
+    .ws-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+
+    .ws-dot.connected {
+      background: #22c55e;
+    }
+
+    .ws-dot.disconnected {
+      background: #f59e0b;
+      animation: pulse-opacity 1.5s ease-in-out infinite;
+    }
+
+    /* ── Message rows ────────────────────────────────────────────── */
+    .message-row {
+      width: 100%;
+      max-width: 850px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .message-avatar.user-avatar {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .message-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .message-content {
+      font-size: var(--chat-font-size, 15px);
+      line-height: 1.7;
+      color: var(--text-primary);
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .message-content p {
+      margin-bottom: 0.8em;
+    }
+
+    .message-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .message-content ul,
+    .message-content ol {
+      margin-left: 20px;
+      margin-bottom: 1em;
+    }
+
+    .message-content pre {
+      background: #f4f4f4;
+      padding: 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      max-width: 100%;
+      margin: 0.6em 0;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+
+    .message-content code {
+      background: #f4f4f4;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 0.9em;
+    }
+
+    .message-content pre code {
+      background: transparent;
+      padding: 0;
+    }
+
+    .message-content table {
+      display: block;
+      overflow-x: auto;
+      max-width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1em;
+    }
+
+    .message-content th,
+    .message-content td {
+      border: 1px solid #ddd;
+      padding: 6px 12px;
+    }
+
+    .message-content a {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+
+    .message-content blockquote {
+      border-left: 3px solid #ddd;
+      padding-left: 1em;
+      color: var(--text-secondary);
+      margin: 0.6em 0;
+    }
+
+    .message-content strong {
+      font-weight: 600;
+    }
+
+    .message-content img {
+      max-width: 100%;
+    }
+
+    /* ── Message actions (bot messages) ──────────────────────────── */
+    .message-actions {
+      display: flex;
+      gap: 4px;
+      margin-top: 10px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .message-row:hover .message-actions {
+      opacity: 1;
+    }
+
+    .msg-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .msg-action-btn:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    .msg-action-btn.rated-up { color: #22c55e; }
+    .msg-action-btn.rated-down { color: #ef4444; }
+
+    .msg-action-btn i {
+      font-size: 18px;
+    }
+
+    .msg-action-btn svg {
+      flex-shrink: 0;
+    }
+
+    /* ── Retry with tools button ──────────────────────────────── */
+    .retry-tools-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border: 1px solid var(--accent-color);
+      border-radius: 14px;
+      background: rgba(139, 92, 246, 0.08);
+      color: var(--accent-color);
+      font-size: 11px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .retry-tools-btn:hover {
+      background: var(--accent-color);
+      color: #fff;
+    }
+
+    .retry-tools-btn i {
+      font-size: 13px;
+    }
+
+    /* ── Message focused (keyboard nav) ─────────────────────── */
+    .message-row.message-focused {
+      outline: 2px solid var(--accent-color);
+      outline-offset: 4px;
+      border-radius: 12px;
+      transition: outline-color 0.3s;
+    }
+
+    /* ── Message rating buttons ────────────────────────────── */
+    .msg-rating-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      font-size: 16px;
+      opacity: 0.4;
+      transition: opacity 0.15s, transform 0.15s;
+      line-height: 1;
+    }
+    .msg-rating-btn:hover { opacity: 0.8; transform: scale(1.15); }
+    .msg-rating-btn.rated { opacity: 1; transform: scale(1.1); }
+    .msg-rating-btn.rated-up { color: #22c55e; }
+    .msg-rating-btn.rated-down { color: #ef4444; }
+
+    /* ── Batch select toolbar ──────────────────────────────── */
+    .batch-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      background: rgba(139, 92, 246, 0.06);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      border-radius: 8px;
+      margin: 0 12px 6px;
+      min-width: 236px;
+    }
+    .batch-toolbar button {
+      padding: 3px 8px;
+      font-size: 11px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-color);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .batch-toolbar button:hover { background: var(--hover-bg); }
+    .batch-toolbar button.danger { color: #dc2626; border-color: #fca5a5; }
+    .batch-toolbar button.danger:hover { background: #dc2626; color: #fff; }
+    .batch-toolbar .batch-count {
+      font-size: 11px;
+      color: var(--accent-color);
+      font-weight: 600;
+      margin-right: auto;
+    }
+    .batch-checkbox {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--accent-color);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ── Input token counter ───────────────────────────────── */
+    .input-token-counter {
+      font-size: 10px;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      text-align: right;
+      padding: 2px 4px 0;
+      transition: opacity 0.2s;
+    }
+    .input-token-counter.visible { opacity: 1; }
+
+    /* ── Context warning pulse ─────────────────────────────── */
+    .context-progress-fill.warning {
+      animation: context-pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes context-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .context-warning-banner {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #dc2626;
+      padding: 4px 16px 2px;
+      animation: context-pulse 2s ease-in-out infinite;
+    }
+
+    /* ── Header overflow menu ─────────────────────────────── */
+    .header-overflow-menu {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 4px;
+      z-index: 60;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      min-width: 180px;
+      padding: 4px;
+    }
+    .header-overflow-menu button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      border-radius: 6px;
+      font-family: inherit;
+      color: var(--text-primary);
+      transition: background 0.15s;
+    }
+    .header-overflow-menu button:hover { background: var(--hover-bg); }
+
+    /* ── MCP error badge ─────────────────────────────────── */
+    .mcp-error-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #dc2626;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(220, 38, 38, 0.06);
+      border: 1px solid rgba(220, 38, 38, 0.15);
+      margin: 4px 0;
+    }
+    .mcp-error-badge button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #2563eb;
+      font-size: 11px;
+      font-family: inherit;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    /* ── Sidebar section collapse transition ───────────────── */
+    .sidebar-collapsible {
+      overflow: hidden;
+      transition: max-height 0.25s ease, opacity 0.2s ease;
+      max-height: 600px;
+      opacity: 1;
+    }
+    .sidebar-collapsible.collapsed {
+      max-height: 0;
+      opacity: 0;
+      margin: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    /* Voice preview grid */
+    .voice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .voice-grid::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .voice-grid::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    .voice-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 8px 4px 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid var(--border-color);
+      background: var(--bg-color);
+      font-family: inherit;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .voice-card:hover {
+      border-color: var(--text-secondary);
+      background: var(--input-bg);
+    }
+
+    .voice-card-selected {
+      border-color: var(--accent-color);
+      background: var(--input-bg);
+      box-shadow: 0 0 0 1px var(--accent-color);
+    }
+
+    .voice-card-playing {
+      border-color: var(--accent-color);
+    }
+
+    .voice-card-playing .voice-card-tag {
+      animation: voice-bounce 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes voice-bounce {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.15);
+      }
+    }
+
+    .voice-card-tag {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--bg-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      line-height: 1;
+    }
+
+    .voice-card-tag.tag-af {
+      background: #e879a0;
+    }
+
+    .voice-card-tag.tag-am {
+      background: #6ea8d9;
+    }
+
+    .voice-card-tag.tag-bf {
+      background: #c47dd6;
+    }
+
+    .voice-card-tag.tag-bm {
+      background: #5bb89a;
+    }
+
+    .voice-card-tag.tag-ef {
+      background: #e8a44e;
+    }
+
+    .voice-card-tag.tag-em {
+      background: #7eb85b;
+    }
+
+    .voice-card-tag.tag-ff {
+      background: #d97eaa;
+    }
+
+    .voice-card-tag.tag-hf,
+    .voice-card-tag.tag-hm {
+      background: #d9a35b;
+    }
+
+    .voice-card-tag.tag-if,
+    .voice-card-tag.tag-im {
+      background: #5bb8b8;
+    }
+
+    .voice-card-tag.tag-jf,
+    .voice-card-tag.tag-jm {
+      background: #e07070;
+    }
+
+    .voice-card-tag.tag-pf,
+    .voice-card-tag.tag-pm {
+      background: #6ec46e;
+    }
+
+    .voice-card-tag.tag-zf,
+    .voice-card-tag.tag-zm {
+      background: #d4704e;
+    }
+
+    .voice-card-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .voice-card-desc {
+      font-size: 9px;
+      color: var(--text-secondary);
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .voice-card-indicator {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .voice-card:hover .voice-card-indicator,
+    .voice-card-playing .voice-card-indicator {
+      opacity: 1;
+    }
+
+    .voice-card-selected .voice-card-indicator {
+      color: var(--accent-color);
+    }
+
+    .voice-card-playing .voice-card-indicator {
+      color: var(--accent-color);
+      opacity: 1;
+    }
+
+    /* TTS active state */
+    .msg-action-btn.tts-active {
+      color: var(--accent-color);
+      background: var(--hover-bg);
+      animation: tts-pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes tts-pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .msg-action-btn.tts-paused {
+      color: var(--accent-color);
+      background: var(--hover-bg);
+    }
+
+    .msg-action-btn.tts-stop-btn {
+      color: var(--error-color, #ff3b30);
+      opacity: 0.7;
+    }
+
+    .msg-action-btn.tts-stop-btn:hover {
+      opacity: 1;
+      background: rgba(255, 59, 48, 0.12);
+    }
+
+    /* ── Thinking / Reasoning Block ──────────────────────────────── */
+    .thinking-block {
+      margin-bottom: 8px;
+      border: 1px solid rgba(167, 139, 250, 0.25);
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(167, 139, 250, 0.06);
+    }
+
+    .thinking-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: background 0.15s;
+    }
+
+    .thinking-toggle:hover {
+      background: rgba(167, 139, 250, 0.1);
+    }
+
+    .thinking-content {
+      display: none;
+      padding: 8px 14px 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-top: 1px solid rgba(167, 139, 250, 0.15);
+      max-height: 300px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    .thinking-block.expanded .thinking-content,
+    .thinking-block.thinking-active .thinking-content {
+      display: block;
+    }
+
+    .thinking-block.expanded .thinking-toggle .ph-caret-down,
+    .thinking-block.thinking-active .thinking-toggle .ph-caret-down {
+      transform: rotate(180deg);
+    }
+
+    .thinking-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(167, 139, 250, 0.3);
+      border-top-color: #a78bfa;
+      border-radius: 50%;
+      animation: thinking-spin 0.8s linear infinite;
+    }
+
+    @keyframes thinking-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── RAG Citations / Sources ─────────────────────────────────── */
+    .rag-citations {
+      margin-top: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--sidebar-bg);
+    }
+
+    .rag-citations-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      padding: 10px 14px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+
+    .rag-citations-toggle:hover {
+      background: var(--hover-bg);
+    }
+
+    .rag-citations-list {
+      border-top: 1px solid var(--border-color);
+    }
+
+    .rag-citation-item {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .rag-citation-item:last-child {
+      border-bottom: none;
+    }
+
+    .rag-citation-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 2px 0;
+    }
+
+    .rag-citation-header:hover {
+      opacity: 0.8;
+    }
+
+    .rag-citation-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 26px;
+      height: 22px;
+      padding: 0 4px;
+      border-radius: 4px;
+      background: #8b5cf6;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .rag-citation-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .rag-citation-score {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .rag-citation-preview {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      max-height: 3em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .rag-citation-full {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--text-primary);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      background: var(--bg-color);
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .rag-citation-source {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: #8b5cf6;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── Typing indicator ────────────────────────────────────────── */
+    .typing-indicator span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #ccc;
+      border-radius: 50%;
+      animation: typing 1.4s infinite both;
+      margin: 0 3px;
+    }
+
+    .typing-indicator span:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
+    }
+
+    /* ── Tool status indicator ───────────────────────────────────── */
+    .tool-status-row {
+      width: 100%;
+      max-width: 850px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* ── Search progress card ────────────────────────────────────── */
+    .search-progress {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      min-width: 320px;
+      max-width: 480px;
+    }
+
+    .search-progress-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .search-progress-header i {
+      font-size: 18px;
+      color: #2563eb;
+    }
+
+    .search-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 13px;
+      color: #94a3b8;
+      transition: color 0.3s, opacity 0.3s;
+    }
+
+    .search-step.active {
+      color: #334155;
+    }
+
+    .search-step.done {
+      color: #16a34a;
+    }
+
+    .step-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+    }
+
+    .step-icon.pending {
+      border: 2px solid #e2e8f0;
+      background: white;
+    }
+
+    .step-icon.active {
+      border: 2px solid #2563eb;
+      background: #eff6ff;
+      color: #2563eb;
+      animation: step-pulse 1.2s ease-in-out infinite;
+    }
+
+    .step-icon.done {
+      border: 2px solid #16a34a;
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    @keyframes step-pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+    }
+
+    .step-label {
+      flex: 1;
+    }
+
+    .step-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #dbeafe;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .search-progress-elapsed {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @keyframes pulse-opacity {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    /* ── Streaming cursor ────────────────────────────────────────── */
+    .streaming-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent-color);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink-cursor 1s step-end infinite;
+    }
+
+    @keyframes blink-cursor {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* ── Input area ──────────────────────────────────────────────── */
+    .input-wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(to top, var(--bg-color) 70%, transparent);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .input-container {
+      width: 100%;
+      max-width: 800px;
+      pointer-events: auto;
+    }
+
+    .input-bar {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 8px 12px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      width: 100%;
+    }
+
+    .input-bar:focus-within {
+      border-color: var(--accent-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-bar textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      padding: 6px 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      min-height: 24px;
+    }
+
+    .input-bar textarea::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    .input-bar textarea::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .input-bar textarea::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+
+    .input-actions {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 20px;
+      padding: 0;
+    }
+
+    .action-btn:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    .send-btn {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .send-btn:hover {
+      background: #333;
+      transform: scale(1.05);
+    }
+
+    .send-btn:disabled {
+      background: var(--border-color);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── Web search toggle ───────────────────────────────────────── */
+    .search-toggle {
+      position: relative;
+    }
+
+    .search-toggle.active {
+      color: #2563eb !important;
+      background: rgba(37, 99, 235, 0.1) !important;
+    }
+
+    .search-toggle.active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #2563eb;
+    }
+
+    .search-active-banner {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #2563eb;
+      padding: 4px 12px;
+      margin-bottom: 6px;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.06);
+      border: 1px solid rgba(37, 99, 235, 0.15);
+    }
+
+    .search-active-banner i {
+      font-size: 14px;
+    }
+
+    /* ── RAG document upload ─────────────────────────────────────── */
+    .rag-panel {
+      padding: 0 12px;
+      min-width: 260px;
+    }
+
+    .rag-doc-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding: 6px 4px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .rag-doc-item:hover {
+      background: var(--hover-bg);
+    }
+
+    .rag-doc-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rag-doc-name {
+      color: var(--text-primary);
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rag-doc-meta {
+      font-size: 10px;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    .rag-doc-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      color: #ccc;
+      font-size: 12px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .rag-doc-item:hover .rag-doc-remove {
+      opacity: 1;
+    }
+
+    .rag-doc-remove:hover {
+      color: #dc2626;
+    }
+
+    /* ── Custom confirm modal (replaces window.confirm) ──────────── */
+    .confirm-message {
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .confirm-btn-danger {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    .confirm-btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    .rag-upload-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      padding: 8px 10px;
+      background: transparent;
+      border: 1px dashed var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      font-family: inherit;
+      margin-top: 6px;
+    }
+
+    .rag-upload-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .rag-upload-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .rag-toggle {
+      position: relative;
+    }
+
+    .rag-toggle.active {
+      color: #8b5cf6 !important;
+      background: rgba(139, 92, 246, 0.1) !important;
+    }
+
+    .rag-toggle.active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #8b5cf6;
+    }
+
+    .rag-active-banner {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #8b5cf6;
+      padding: 4px 12px;
+      margin-bottom: 6px;
+      border-radius: 12px;
+      background: rgba(139, 92, 246, 0.06);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+    }
+
+    .rag-active-banner i {
+      font-size: 14px;
+    }
+
+    .upload-progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #8b5cf6;
+      padding: 6px 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      background: rgba(139, 92, 246, 0.06);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      animation: pulse-opacity 1.5s ease-in-out infinite;
+    }
+
+    .upload-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(139, 92, 246, 0.2);
+      border-top-color: #8b5cf6;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .rag-clear-btn {
+      font-size: 11px;
+      color: #999;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .rag-clear-btn:hover {
+      color: #dc2626;
+      background: rgba(220, 38, 38, 0.06);
+    }
+
+    .footer-note {
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+      margin-top: 10px;
+      pointer-events: auto;
+    }
+
+    /* ── Toast ────────────────────────────────────────────────────── */
+    .toast-notification {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s, bottom 0.3s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-family: inherit;
+      white-space: nowrap;
+      pointer-events: auto;
+    }
+
+    .toast-notification.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-notification.error {
+      background: #dc2626;
+    }
+
+    /* ── Stop generation button ─────────────────────────────────────────── */
+    .stop-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background: var(--bg-color);
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .stop-btn:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #dc2626;
+    }
+
+    .stop-btn i {
+      font-size: 15px;
+    }
+
+    .stop-btn .kbd-hint {
+      font-size: 10px;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      margin-left: 4px;
+    }
+
+    /* ── Drag & drop overlay ─────────────────────────────────────────── */
+    .drag-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(139, 92, 246, 0.08);
+      border: 3px dashed #8b5cf6;
+      border-radius: 16px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .drag-overlay i {
+      font-size: 48px;
+      color: #8b5cf6;
+    }
+
+    .drag-overlay span {
+      font-size: 16px;
+      font-weight: 500;
+      color: #8b5cf6;
+    }
+
+    .drag-overlay .drag-hint {
+      font-size: 12px;
+      color: #a78bfa;
+    }
+
+    /* ── Syntax highlighting tweaks for code blocks ───────────────── */
+    .code-block-wrapper {
+      position: relative;
+    }
+
+    .message-content pre {
+      position: relative;
+    }
+
+    .message-content pre code.hljs {
+      background: #f4f4f4;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .code-lang-label {
+      position: absolute;
+      top: 6px;
+      left: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      pointer-events: none;
+    }
+
+    .code-copy-btn {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.06);
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: #666;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s;
+      font-family: inherit;
+    }
+
+    .code-block-wrapper:hover .code-copy-btn,
+    .code-copy-btn:focus-visible {
+      opacity: 1;
+    }
+
+    .code-copy-btn:hover {
+      background: rgba(0, 0, 0, 0.12);
+      color: #333;
+    }
+
+    /* ── Conversation search ──────────────────────────────────────── */
+    .search-conversations-input {
+      width: 100%;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 6px 10px 6px 28px;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+      margin-bottom: 4px;
+    }
+
+    .search-conversations-input:focus {
+      border-color: var(--accent-color);
+    }
+
+    .search-conversations-wrapper {
+      position: relative;
+      padding: 0 12px;
+      min-width: 260px;
+    }
+
+    .search-conversations-wrapper i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-70%);
+      font-size: 14px;
+      color: #999;
+      pointer-events: none;
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-70%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #999;
+      font-size: 13px;
+      padding: 2px;
+      line-height: 1;
+    }
+
+    .search-clear-btn:hover {
+      color: #666;
+    }
+
+    .search-result-count {
+      padding: 2px 12px 6px;
+      font-size: 11px;
+      color: #8b5cf6;
+      font-weight: 500;
+    }
+
+    .search-match-preview {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 2px;
+      font-size: 11px;
+      color: #888;
+      line-height: 1.3;
+    }
+
+    .search-match-preview .match-count {
+      flex-shrink: 0;
+      background: #f0ebff;
+      color: #7c3aed;
+      padding: 1px 5px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .search-match-preview .match-snippet {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    /* ── System prompt & templates ───────────────────────────────── */
+    .header-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .header-right-actions .icon-btn {
+      font-size: 18px;
+      color: #888;
+      transition: color 0.2s;
+    }
+
+    .header-right-actions .icon-btn:hover {
+      color: var(--accent-color);
+    }
+
+    .persona-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(139, 92, 246, 0.08);
+      color: var(--accent-color);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-left: 8px;
+      border: 1px solid rgba(139, 92, 246, 0.15);
+    }
+
+    .persona-badge i {
+      font-size: 13px;
+    }
+
+    .template-quick-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #f5f5f5;
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      cursor: pointer;
+      color: #555;
+      transition: all 0.15s;
+    }
+
+    .template-quick-btn:hover {
+      background: rgba(139, 92, 246, 0.06);
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 10px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding: 2px;
+    }
+
+    .template-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 18px 12px 14px;
+      background: #fafafa;
+      border: 1.5px solid #ebebeb;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .template-card:hover {
+      border-color: var(--accent-color);
+      background: rgba(139, 92, 246, 0.04);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+    }
+
+    .template-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: rgba(139, 92, 246, 0.08);
+      color: var(--accent-color);
+      font-size: 20px;
+    }
+
+    .template-card:hover .template-icon {
+      background: rgba(139, 92, 246, 0.14);
+    }
+
+    .template-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .template-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+
+    .template-card {
+      position: relative;
+    }
+
+    .template-custom-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--accent-color);
+    }
+
+    .template-delete-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ccc;
+      font-size: 14px;
+      padding: 2px;
+      border-radius: 4px;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+
+    .template-delete-btn:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .template-card-add {
+      border-style: dashed;
+      border-color: #ccc;
+      background: transparent;
+    }
+
+    .template-card-add:hover {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.03);
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
+    }
+
+    .add-template-form {
+      padding: 20px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-color);
+    }
+
+    .add-template-form .form-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .add-template-form .form-header .back-btn {
+      background: none;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+      font-size: 16px;
+    }
+
+    .add-template-form .form-header .back-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+      background: rgba(139, 92, 246, 0.05);
+    }
+
+    .icon-picker-btn {
+      width: 30px;
+      height: 30px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+
+    .icon-picker-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    .icon-picker-btn.active {
+      border-color: var(--accent-color);
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--accent-color);
+    }
+
+    .auto-memory-toggle {
+      padding: 6px 0 10px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 8px;
+    }
+
+    /* ── Mobile overlay ──────────────────────────────────────────── */
+    .mobile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .mobile-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ── Scrollbar ────────────────────────────────────────────────── */
+    #chat-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #chat-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #chat-container::-webkit-scrollbar-thumb {
+      background: #ddd;
+      border-radius: 3px;
+    }
+
+    #chat-container::-webkit-scrollbar-thumb:hover {
+      background: #bbb;
+    }
+
+    .chat-list-container::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-list-container::-webkit-scrollbar-thumb {
+      background: #ddd;
+      border-radius: 2px;
+    }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 890px) {
+
+      .message-row,
+      .tool-status-row {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .header-toggle,
+      .header-new-chat {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+
+      #sidebar {
+        position: fixed;
+        height: 100%;
+        z-index: 50;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        transform: translateX(-100%);
+        width: 260px !important;
+        transition: transform 0.3s ease;
+      }
+
+      #sidebar.mobile-open {
+        transform: translateX(0);
+      }
+
+      body {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .input-wrapper {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: auto;
+        padding: 16px;
+        z-index: 20;  /* Below mobile-overlay (40) and sidebar (50) */
+        background: linear-gradient(to top, var(--bg-color) 80%, transparent);
+      }
+
+      .input-bar {
+        padding: 12px 16px;
+      }
+
+      .model-selector-badge .persona-badge {
+        display: none;
+      }
+    }
+
+    /* ── Model Manager (#13) ─────────────────────────────────────── */
+    .model-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .model-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--sidebar-bg);
+    }
+
+    .model-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .model-card-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .model-card-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .model-card-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .pull-progress-bar {
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .pull-progress-fill {
+      height: 100%;
+      background: #2563eb;
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    /* ── Conversation Tags (#16) ─────────────────────────────────── */
+    .conv-tags {
+      display: none;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .chat-list-item:hover .conv-tags,
+    .chat-list-item.active .conv-tags {
+      display: flex;
+    }
+
+    .conv-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 1px 6px;
+      background: #e8e8e8;
+      border-radius: 10px;
+      font-size: 10px;
+      color: #555;
+      cursor: default;
+      max-width: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .conv-tag-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 10px;
+      color: #999;
+      padding: 0;
+      margin-left: 1px;
+      line-height: 1;
+    }
+
+    .conv-tag-remove:hover {
+      color: #f00;
+    }
+
+    .conv-tags .conv-tag-add {
+      opacity: 0;
+      transition: opacity 0.15s;
+      flex-shrink: 0;
+      overflow: visible;
+      max-width: none;
+    }
+
+    .chat-list-item:hover .conv-tags .conv-tag-add {
+      opacity: 1;
+    }
+
+    .branch-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 10px;
+      color: #8b5cf6;
+      margin-left: 4px;
+    }
+
+    .tag-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      padding: 2px 12px 4px;
+    }
+
+    .tag-filter-btn {
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      font-size: 11px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .tag-filter-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    .tag-filter-btn.active {
+      background: var(--accent-color);
+      color: #fff;
+      border-color: var(--accent-color);
+    }
+
+    .tag-input-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .tag-input-row input {
+      flex: 1;
+      min-width: 0;
+      padding: 2px 6px;
+      font-size: 11px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--input-bg);
+      font-family: inherit;
+      outline: none;
+    }
+
+    .tag-input-row button {
+      padding: 2px 8px;
+      font-size: 11px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      background: var(--hover-bg);
+      font-family: inherit;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .tag-input-wrapper {
+      position: relative;
+      margin-top: 4px;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .tag-input-wrapper .tag-input-row {
+      margin-top: 0;
+    }
+
+    .tag-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: 4px;
+    }
+
+    .tag-suggestion-item {
+      padding: 1px 7px;
+      font-size: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      cursor: pointer;
+      background: var(--sidebar-bg);
+      color: var(--text-secondary);
+      font-family: inherit;
+      transition: all .15s;
+    }
+
+    .tag-suggestion-item:hover {
+      background: var(--accent-color);
+      color: #fff;
+      border-color: var(--accent-color);
+    }
+
+    /* ── Token Dashboard (#17) ────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat-card {
+      padding: 14px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--sidebar-bg);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+    }
+
+    .stat-card .stat-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .stat-card .stat-icon.blue {
+      background: rgba(37, 99, 235, 0.12);
+      color: #2563eb;
+    }
+
+    .stat-card .stat-icon.amber {
+      background: rgba(245, 158, 11, 0.12);
+      color: #f59e0b;
+    }
+
+    .stat-card .stat-icon.violet {
+      background: rgba(139, 92, 246, 0.12);
+      color: #8b5cf6;
+    }
+
+    .stat-card .stat-icon.emerald {
+      background: rgba(16, 185, 129, 0.12);
+      color: #10b981;
+    }
+
+    .stat-card .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .stat-card .stat-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .stats-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin: 18px 0 8px;
+    }
+
+    .session-bar {
+      display: flex;
+      gap: 1px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin-top: 4px;
+    }
+
+    .session-bar .sb-cell {
+      flex: 1;
+      padding: 10px 8px;
+      text-align: center;
+      background: var(--sidebar-bg);
+    }
+
+    .session-bar .sb-cell .sb-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .session-bar .sb-cell .sb-lbl {
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .token-empty-state {
+      text-align: center;
+      padding: 28px 16px;
+      color: var(--text-secondary);
+    }
+
+    .token-empty-state i {
+      font-size: 36px;
+      opacity: 0.3;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .token-empty-state p {
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .inline-stats {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      padding: 4px 0;
+    }
+
+    .inline-stats span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* ── Branch button in message actions ──────────────────────────── */
+    .branch-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+
+    .branch-btn:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    .branch-btn i {
+      font-size: 16px;
+    }
+
+    /* ── Export menu ──────────────────────────────────────────────── */
+    .export-menu {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 4px;
+      z-index: 50;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      min-width: 160px;
+      padding: 4px;
+    }
+
+    .export-menu button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      border-radius: 6px;
+      font-family: inherit;
+      color: var(--text-primary);
+      transition: background 0.15s;
+    }
+
+    .export-menu button:hover {
+      background: var(--hover-bg);
+    }
+
+    /* ── Conversation Rename (#19) ────────────────────────────── */
+    .rename-input {
+      width: 100%;
+      padding: 3px 6px;
+      font-size: 12px;
+      border: 1px solid var(--accent-color);
+      border-radius: 4px;
+      background: var(--input-bg);
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    /* ── Message Edit (#20) ──────────────────────────────────── */
+    .edit-message-area {
+      width: 100%;
+      min-height: 60px;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid var(--accent-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .edit-message-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .edit-message-actions button {
+      padding: 4px 12px;
+      font-size: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .edit-msg-save {
+      background: var(--accent-color);
+      color: #fff;
+      border-color: var(--accent-color) !important;
+    }
+
+    .edit-msg-save:hover {
+      opacity: 0.85;
+    }
+
+    .edit-msg-cancel {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .edit-msg-cancel:hover {
+      background: var(--hover-bg);
+    }
+
+    /* ── Settings Panel (#38) ─────────────────────────────────── */
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-header h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--input-bg);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .modal-close:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    .settings-body {
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-color) transparent;
+    }
+
+    .settings-body::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .settings-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .settings-body::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    .settings-section {
+      margin-bottom: 20px;
+    }
+
+    .settings-section:last-child {
+      margin-bottom: 8px;
+    }
+
+    .settings-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 13px;
+      color: var(--text-primary);
+      gap: 16px;
+    }
+
+    .settings-row+.settings-row {
+      border-top: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .settings-row-label {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .settings-row-label label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: block;
+      line-height: 1.3;
+    }
+
+    .settings-row-label .settings-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .settings-row-control {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Toggle switch */
+    .settings-toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      cursor: pointer;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .settings-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .settings-toggle .toggle-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--border-color);
+      border-radius: 22px;
+      transition: all 0.25s ease;
+    }
+
+    .settings-toggle .toggle-slider:before {
+      content: '';
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: all 0.25s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .settings-toggle input:checked+.toggle-slider {
+      background: var(--accent-color);
+    }
+
+    .settings-toggle input:checked+.toggle-slider:before {
+      transform: translateX(18px);
+    }
+
+    /* Select dropdown */
+    .settings-select {
+      padding: 6px 28px 6px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 12px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-family: inherit;
+      outline: none;
+      max-width: 170px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23666' viewBox='0 0 256 256'%3E%3Cpath d='M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      transition: border-color 0.15s;
+    }
+
+    .settings-select:hover {
+      border-color: var(--text-secondary);
+    }
+
+    .settings-select:focus {
+      border-color: var(--accent-color);
+    }
+
+    /* Range slider */
+    .settings-range-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 150px;
+    }
+
+    .settings-range-row input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent-color);
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--border-color);
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .settings-range-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .settings-range-value {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      min-width: 36px;
+      text-align: right;
+      background: var(--input-bg);
+      padding: 3px 6px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+
+    /* Action buttons in settings rows */
+    .settings-action-btn {
+      padding: 6px 14px;
+      font-size: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .settings-action-btn:hover {
+      background: var(--hover-bg);
+      border-color: var(--text-secondary);
+    }
+
+    /* Danger zone */
+    .settings-danger-zone {
+      margin-top: 8px;
+      padding: 14px 16px;
+      border: 1px solid #fca5a5;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #fef2f2, #fff5f5);
+    }
+
+    .settings-danger-zone .settings-section-title {
+      color: #dc2626;
+      border-bottom-color: #fecaca;
+      margin-bottom: 10px;
+    }
+
+    .settings-danger-btn {
+      padding: 6px 14px;
+      font-size: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid #fca5a5;
+      background: transparent;
+      color: #dc2626;
+      font-family: inherit;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .settings-danger-btn:hover {
+      background: #dc2626;
+      color: #fff;
+      border-color: #dc2626;
+    }
+
+    /* ── Animated input focus glow ─────────────────────────────── */
+    @keyframes input-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 0 2px rgba(16, 185, 129, 0.12);
+      }
+
+      50% {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 3px rgba(16, 185, 129, 0.22);
+      }
+    }
+
+    .input-bar:focus-within {
+      border-color: #10b981;
+      animation: input-glow 2.5s ease-in-out infinite;
+    }
+
+    [data-theme="dark"] .input-bar:focus-within {
+      border-color: #34d399;
+    }
+
+    /* ── Pin conversations ─────────────────────────────────────── */
+    .chat-pin-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      flex-shrink: 0;
+      transition: color 0.15s;
+    }
+
+    .chat-list-item:hover .chat-pin-btn {
+      display: flex;
+    }
+
+    .chat-pin-btn:hover {
+      color: #f59e0b;
+    }
+
+    .chat-pin-btn.pinned {
+      display: flex;
+      color: #f59e0b;
+    }
+
+    .chat-list-item:hover .chat-pin-btn.pinned {
+      display: flex;
+    }
+
+    .pin-icon-inline {
+      font-size: 10px;
+      color: #f59e0b;
+      flex-shrink: 0;
+    }
+
+    /* ── Word count & reading time ─────────────────────────────── */
+    .message-meta {
+      display: flex;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      opacity: 0;
+      transition: opacity 0.2s;
+      margin-top: 4px;
+    }
+
+    .message-row:hover .message-meta {
+      opacity: 0.6;
+    }
+
+    .message-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .message-meta i {
+      font-size: 12px;
+    }
+
+    /* ── Delete confirmation ───────────────────────────────────── */
+    .delete-confirm {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .delete-confirm-btn {
+      padding: 2px 8px;
+      font-size: 11px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .delete-confirm-yes {
+      background: #dc2626;
+      color: white;
+    }
+
+    .delete-confirm-yes:hover {
+      background: #b91c1c;
+    }
+
+    .delete-confirm-no {
+      background: var(--input-bg);
+      color: var(--text-secondary);
+    }
+
+    .delete-confirm-no:hover {
+      background: var(--hover-bg);
+    }
+
+    /* ── Keyboard shortcuts modal ──────────────────────────────── */
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 28px;
+    }
+
+    @media (max-width: 500px) {
+      .shortcuts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      font-size: 13px;
+      color: var(--text-primary);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    [data-theme="dark"] .shortcut-item {
+      border-bottom-color: rgba(255, 255, 255, 0.04);
+    }
+
+    .shortcut-keys {
+      display: flex;
+      gap: 3px;
+    }
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 6px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--text-secondary);
+      box-shadow: 0 1px 0 var(--border-color);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ═══════════ ROOT ALPINE COMPONENT ══════════════════════════ -->
+  <div x-data="chatApp()" x-init="init()" style="display:flex;width:100%;height:100%;">
+
+    <!-- Mobile sidebar overlay (inside Alpine scope) -->
+    <div class="mobile-overlay" id="mobile-overlay" :class="{ active: mobileOverlayActive }" @click="toggleSidebar()"
+      role="presentation"></div>
+
+    <!-- ═══════════ SIDEBAR ════════════════════════════════════════ -->
+    <aside id="sidebar" :class="{ collapsed: sidebarCollapsed }" role="complementary" aria-label="Chat sidebar">
+      <div class="sidebar-header">
+        <button class="icon-btn" @click="toggleSidebar()" aria-label="Toggle sidebar">
+          <i class="ph ph-sidebar-simple" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div style="padding: 0 12px 6px; min-width: 260px;">
+        <button class="new-chat-btn" @click="clearHistory()" aria-label="New chat">
+          <i class="ph ph-plus" style="font-size:16px;" aria-hidden="true"></i>
+          <span>New Chat</span>
+        </button>
+      </div>
+
+      <div class="sidebar-scroll">
+      <!-- Chat history list -->
+      <div class="sidebar-section-header" @click.self>
+        <span class="label">Conversations</span>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <button class="action-link" @click.stop="toggleBatchSelect()"
+            x-text="batchSelectMode ? '✓ Done' : 'Select'"
+            :style="batchSelectMode ? 'color:var(--accent-color)' : ''">
+          </button>
+          <span class="label" x-text="conversations.length + ' chats'" style="font-weight:400;"></span>
+        </span>
+      </div>
+      <!-- Batch toolbar -->
+      <template x-if="batchSelectMode">
+      <div class="batch-toolbar" x-transition>
+        <span class="batch-count" x-text="selectedConvIds.size + ' selected'"></span>
+        <button @click="selectAllConversations()" title="Select all">
+          <i class="ph ph-checks"></i> All
+        </button>
+        <button @click="batchTagConversations()" :disabled="selectedConvIds.size === 0" title="Tag selected">
+          <i class="ph ph-tag"></i>
+        </button>
+        <button @click="batchExportConversations()" :disabled="selectedConvIds.size === 0" title="Export selected">
+          <i class="ph ph-export"></i>
+        </button>
+        <button class="danger" @click="batchDeleteConversations()" :disabled="selectedConvIds.size === 0" title="Delete selected">
+          <i class="ph ph-trash"></i>
+        </button>
+      </div>
+      </template>
+      <!-- Conversation search -->
+      <div class="search-conversations-wrapper">
+        <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+        <input class="search-conversations-input" type="text" x-model="conversationSearch" x-ref="convSearchInput"
+          :placeholder="'Search chats…   ' + (isMac ? '⌘F' : 'Ctrl+F')" aria-label="Search conversations" />
+        <button class="search-clear-btn" x-show="conversationSearch" @click="conversationSearch = ''"
+          title="Clear search">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <div class="search-result-count" x-show="conversationSearch" x-transition>
+        <span
+          x-text="filteredConversationsWithTags.length + ' result' + (filteredConversationsWithTags.length !== 1 ? 's' : '') + ' found'"></span>
+      </div>
+
+      <!-- Tag filter bar -->
+      <template x-if="allTags.length > 0">
+        <div class="tag-filter-bar">
+          <button class="tag-filter-btn" :class="{ active: !tagFilter }" @click="tagFilter = ''" aria-label="Show all conversations">All</button>
+          <template x-for="tag in allTags" :key="tag">
+            <button class="tag-filter-btn" :class="{ active: tagFilter === tag }"
+              @click="tagFilter = tagFilter === tag ? '' : tag" x-text="tag" :aria-label="'Filter by tag: ' + tag"></button>
+          </template>
+        </div>
+      </template>
+
+      <div class="chat-list-container">
+        <template x-for="group in conversationGroups" :key="group.label">
+          <div>
+            <div class="chat-group-label" x-text="group.label"></div>
+            <template x-for="conv in group.conversations" :key="conv.id">
+              <div class="chat-list-item" :class="{ active: conv.id === currentConversationId }"
+                @click="batchSelectMode ? toggleConvSelection(conv.id) : switchConversation(conv.id)">
+                <input x-show="batchSelectMode" type="checkbox" class="batch-checkbox"
+                  :checked="selectedConvIds.has(conv.id)"
+                  @click.stop="toggleConvSelection(conv.id)" />
+                <i x-show="!batchSelectMode" class="ph" :class="conv.pinned ? 'ph-push-pin' : 'ph-chat-text'"
+                  style="font-size:16px; flex-shrink:0;" :style="conv.pinned ? 'color:#f59e0b' : 'color:#999'"></i>
+                <div style="flex:1;min-width:0;">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <template x-if="renamingConvId === conv.id">
+                      <input type="text" class="rename-input" x-model="renameText"
+                        x-init="$nextTick(() => { $el.focus(); $el.select(); })"
+                        @keydown.enter.prevent.stop="confirmRename(conv.id)"
+                        @keydown.escape.prevent.stop="cancelRename()" @click.stop
+                        @blur="if (renamingConvId === conv.id) confirmRename(conv.id)" />
+                    </template>
+                    <template x-if="renamingConvId !== conv.id">
+                      <span class="chat-title" x-text="getConversationTitle(conv)" @dblclick.stop="startRename(conv)"
+                        title="Double-click to rename"></span>
+                    </template>
+                    <span class="branch-indicator" x-show="conv.branchedFrom" title="Branched conversation">
+                      <i class="ph ph-git-branch"></i>
+                    </span>
+                    <span class="chat-time" x-text="formatDate(conv.updatedAt || conv.createdAt)"></span>
+                  </div>
+                  <!-- Tags -->
+                  <div class="conv-tags">
+                    <template x-for="tag in getConvTags(conv)" :key="tag">
+                      <span class="conv-tag">
+                        <span x-text="tag"></span>
+                        <button class="conv-tag-remove" :aria-label="'Remove tag ' + tag"
+                          @click.stop="removeTagFromConversation(conv.id, tag)">&times;</button>
+                      </span>
+                    </template>
+                    <button class="conv-tag conv-tag-add"
+                      style="cursor:pointer;background:transparent;border:1px dashed #ccc;"
+                      @click.stop="editingTagConvId = editingTagConvId === conv.id ? null : conv.id" title="Add tag">
+                      <i class="ph ph-tag" style="font-size:9px;"></i> +
+                    </button>
+                  </div>
+                  <!-- Add tag input -->
+                  <template x-if="editingTagConvId === conv.id">
+                    <div class="tag-input-wrapper" @click.stop>
+                      <div class="tag-input-row">
+                        <input type="text" x-model="newTagText" placeholder="Tag name…"
+                          x-init="$nextTick(() => $el.focus())" @keydown.enter.prevent="addTagToConversation(conv.id)"
+                          @keydown.escape.prevent="editingTagConvId = null" />
+                        <button @click="addTagToConversation(conv.id)">Add</button>
+                      </div>
+                      <template x-if="tagSuggestionsFor(conv.id).length > 0">
+                        <div class="tag-suggestions">
+                          <template x-for="s in tagSuggestionsFor(conv.id)" :key="s">
+                            <button class="tag-suggestion-item" @click.stop="selectTagSuggestion(conv.id, s)"
+                              x-text="s"></button>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                  <template x-if="conversationSearch && getSearchMatchInfo(conv)">
+                    <div class="search-match-preview">
+                      <span class="match-count"
+                        x-text="getSearchMatchInfo(conv).matchCount + ' match' + (getSearchMatchInfo(conv).matchCount !== 1 ? 'es' : '')"
+                        x-show="getSearchMatchInfo(conv).matchCount > 0"></span>
+                      <span class="match-snippet" x-text="getSearchMatchInfo(conv).snippet"></span>
+                    </div>
+                  </template>
+                </div>
+                <button class="chat-pin-btn" :class="{ pinned: conv.pinned }"
+                  @click.stop="togglePinConversation(conv.id)" :title="conv.pinned ? 'Unpin' : 'Pin'">
+                  <i class="ph" :class="conv.pinned ? 'ph-push-pin-slash' : 'ph-push-pin'"></i>
+                </button>
+                <button class="chat-delete" @click.stop="deleteConversation(conv.id)" title="Delete">
+                  <i class="ph ph-trash"></i>
+                </button>
+              </div>
+            </template>
+          </div>
+        </template>
+        <template x-if="filteredConversationsWithTags.length === 0">
+          <div style="padding: 12px; text-align: center; color: #bbb; font-size: 13px; font-style: italic;">
+            <span x-text="conversationSearch || tagFilter ? 'No matching chats' : 'No conversations yet'"></span>
+          </div>
+        </template>
+      </div>
+
+      <hr class="sidebar-divider" />
+
+      <!-- Model & Settings -->
+      <div class="sidebar-section-header" @click="toggleSidebarSection('model')">
+        <span class="label">
+          <i class="ph ph-caret-down section-caret" :class="{ collapsed: !sidebarSections.model }"></i>
+          Model &amp; Settings
+        </span>
+        <button class="action-link" @click.stop="openModelManager()" style="font-size:11px;">
+          <i class="ph ph-package" style="font-size:12px;"></i> Manage
+        </button>
+      </div>
+      <div class="sidebar-section sidebar-collapsible" :class="{ collapsed: !sidebarSections.model }" style="margin-bottom:12px;">
+        <select x-model="currentModel" @change="updateMaxContext()" class="sidebar-select">
+          <template x-if="models.length === 0">
+            <option value="" disabled selected>No models — is Ollama running?</option>
+          </template>
+          <template x-for="m in models" :key="m">
+            <option :value="m" x-text="m"></option>
+          </template>
+        </select>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--text-secondary);">
+          <span>Temp</span>
+          <input type="range" min="0" max="2" step="0.05" x-model.number="temperature" class="temp-slider" style="flex:1;" />
+          <span x-text="temperature.toFixed(2)" style="min-width:32px;text-align:right;font-variant-numeric:tabular-nums;"></span>
+        </div>
+      </div>
+
+      <!-- Memory -->
+      <div class="sidebar-section-header" @click="toggleSidebarSection('memory')">
+        <span class="label">
+          <i class="ph ph-caret-down section-caret" :class="{ collapsed: !sidebarSections.memory }"></i>
+          Memory
+          <span x-show="memories.length > 0" style="font-weight:400;font-size:11px;color:var(--text-secondary);"
+            x-text="'(' + memories.length + ')'"></span>
+        </span>
+      </div>
+      <div class="sidebar-collapsible" :class="{ collapsed: !sidebarSections.memory }">
+      <div class="memory-panel">
+        <!-- Auto-memory toggle -->
+        <div class="auto-memory-toggle">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:#888;">
+            <input type="checkbox" x-model="autoMemoryEnabled"
+              @change="diskStorage.setItem('localai_auto_memory', autoMemoryEnabled)"
+              style="accent-color:var(--accent-color);" />
+            <i class="ph ph-sparkle" style="font-size:14px;color:#8b5cf6;"></i>
+            Auto-extract facts from chats
+          </label>
+        </div>
+        <template x-for="mem in memories" :key="mem.id">
+          <div class="memory-item">
+            <i class="ph" :class="mem.auto ? 'ph-sparkle' : 'ph-brain'"
+              style="font-size:13px; color:#999; margin-top:2px; flex-shrink:0;"></i>
+            <span class="memory-text" x-text="mem.text"></span>
+            <button class="memory-remove" @click="removeMemory(mem.id)" title="Remove">
+              <i class="ph ph-x"></i>
+            </button>
+          </div>
+        </template>
+        <div class="memory-add-row">
+          <input class="memory-input" type="text" x-model="newMemoryText" @keydown.enter="addMemory()"
+            placeholder="Remember that…" />
+          <button class="memory-save-btn" @click="addMemory()">
+            <i class="ph ph-plus" style="font-size:13px;"></i>
+          </button>
+        </div>
+      </div>
+      </div><!-- /memory collapsible -->
+
+      <!-- MCP -->
+      <div class="sidebar-section-header" @click="toggleSidebarSection('mcpServers')">
+        <span class="label">
+          <i class="ph ph-caret-down section-caret" :class="{ collapsed: !sidebarSections.mcpServers }"></i>
+          MCP
+        </span>
+        <button class="action-link" @click.stop="openMcpModal()">
+          <i class="ph ph-plus" style="font-size:12px;"></i> Add
+        </button>
+      </div>
+      <div class="sidebar-section sidebar-collapsible" :class="{ collapsed: !sidebarSections.mcpServers }" style="margin-bottom:12px;">
+        <template x-if="mcpServers.length === 0">
+          <div class="mcp-none">No servers registered</div>
+        </template>
+        <template x-for="s in mcpServers" :key="s.name">
+          <div class="mcp-item">
+            <span class="mcp-dot" :class="{ stopped: s.status === 'error' }"></span>
+            <div style="flex:1;min-width:0;">
+              <div class="mcp-name" x-text="s.name"></div>
+              <div class="mcp-type" x-text="(s.transport === 'http' ? '\u{1F310} Remote' : '\u{1F4BB} Local')"
+                style="font-size:10px;color:#999;margin-top:2px;"></div>
+            </div>
+            <div class="mcp-actions">
+              <button class="mcp-action-btn" @click="restartMcpServer(s.name)" title="Restart">
+                <i class="ph ph-arrows-clockwise"></i>
+              </button>
+              <button class="mcp-action-btn danger" @click="removeMcpServer(s.name)" title="Remove">
+                <i class="ph ph-trash"></i>
+              </button>
+            </div>
+          </div>
+        </template>
+        <!-- MCP error badge when servers exist but tools failed -->
+        <div class="mcp-error-badge" x-show="mcpToolsError && !mcpToolsLoading" x-transition>
+          <i class="ph ph-warning-circle" style="font-size:13px;"></i>
+          <span>Tools failed to load</span>
+          <button @click.stop="retryMcpTools()">Retry</button>
+        </div>
+
+        <!-- Inline MCP Tools sub-section -->
+        <template x-if="mcpTools.length > 0 || mcpToolsLoading">
+          <div style="margin-top:8px;border-top:1px solid var(--border-color);padding-top:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-size:11px;font-weight:600;color:var(--text-secondary);">🔧 Tools</span>
+              <button class="action-link" @click="showMcpToolsPanel = !showMcpToolsPanel"
+                x-text="showMcpToolsPanel ? 'Hide' : mcpTools.length + ' tools'">
+              </button>
+            </div>
+            <div x-show="showMcpToolsPanel" x-transition style="margin-bottom:8px;">
+              <div style="font-size:11px;color:#999;margin-bottom:6px;" x-show="mcpToolsLoading">
+                <i class="ph ph-spinner" style="animation:spin 0.7s linear infinite;"></i> Loading tools…
+              </div>
+              <template x-for="tool in mcpTools" :key="tool.name">
+                <div class="mcp-tool-item">
+                  <div class="mcp-tool-header">
+                    <i class="ph ph-wrench" style="font-size:13px;color:#10b981;flex-shrink:0;"></i>
+                    <div style="flex:1;min-width:0;">
+                      <div class="mcp-tool-name" x-text="tool.name"></div>
+                      <div class="mcp-tool-server" x-text="tool.server"></div>
+                    </div>
+                    <button class="mcp-action-btn" style="font-size:12px;"
+                      :title="savedToolParams[tool.name] ? 'Edit default params' : 'Set default params'"
+                      @click.stop="editingToolParam = editingToolParam === tool.name ? null : tool.name; editingToolParamJson = JSON.stringify(savedToolParams[tool.name] || {}, null, 2);"
+                      :style="savedToolParams[tool.name] ? 'color:#10b981' : ''">
+                      <i class="ph" :class="savedToolParams[tool.name] ? 'ph-floppy-disk' : 'ph-sliders-horizontal'"></i>
+                    </button>
+                  </div>
+                  <div class="mcp-tool-desc" x-text="tool.description" x-show="tool.description"></div>
+                  <!-- Saved params indicator -->
+                  <div x-show="savedToolParams[tool.name] && editingToolParam !== tool.name"
+                    style="font-size:10px;color:#10b981;margin-top:3px;display:flex;align-items:center;gap:3px;">
+                    <i class="ph ph-check-circle" style="font-size:11px;"></i>
+                    <span>Has saved defaults</span>
+                  </div>
+                  <!-- Edit saved params inline -->
+                  <template x-if="editingToolParam === tool.name">
+                    <div style="margin-top:6px;" @click.stop>
+                      <textarea class="modal-input" x-model="editingToolParamJson" rows="4"
+                        style="font-size:11px;font-family:'SF Mono','Fira Code',monospace;resize:vertical;padding:6px 8px;line-height:1.4;"
+                        placeholder='{"key": "value"}'></textarea>
+                      <div style="display:flex;gap:4px;margin-top:4px;">
+                        <button style="flex:1;padding:4px 8px;font-size:11px;border:1px solid var(--border-color);border-radius:6px;background:var(--accent-color);color:#fff;cursor:pointer;font-family:inherit;"
+                          @click="try { const p = JSON.parse(editingToolParamJson); saveToolParam(tool.name, p); editingToolParam = null; } catch(e) { showToast('Invalid JSON', 'error'); }">
+                          Save
+                        </button>
+                        <button style="padding:4px 8px;font-size:11px;border:1px solid var(--border-color);border-radius:6px;background:transparent;color:var(--text-secondary);cursor:pointer;font-family:inherit;"
+                          x-show="savedToolParams[tool.name]"
+                          @click="removeToolParam(tool.name); editingToolParam = null;">
+                          Remove
+                        </button>
+                        <button style="padding:4px 8px;font-size:11px;border:1px solid var(--border-color);border-radius:6px;background:transparent;color:var(--text-secondary);cursor:pointer;font-family:inherit;"
+                          @click="editingToolParam = null">
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Documents -->
+      <div class="sidebar-section-header" @click="toggleSidebarSection('ragDocs')">
+        <span class="label">
+          <i class="ph ph-caret-down section-caret" :class="{ collapsed: !sidebarSections.ragDocs }"></i>
+          Documents
+          <span x-show="ragDocuments.length > 0" style="font-weight:400;font-size:11px;color:var(--text-secondary);"
+            x-text="'(' + ragDocuments.length + ')'"></span>
+        </span>
+        <template x-if="ragDocuments.length > 0">
+          <button class="rag-clear-btn" @click="clearRagDocuments()">Clear all</button>
+        </template>
+        <template x-if="ragDocuments.length === 0">
+          <span class="action-link" style="cursor:default;font-size:10px;color:#bbb;">No files</span>
+        </template>
+      </div>
+      <div class="sidebar-collapsible" :class="{ collapsed: !sidebarSections.ragDocs }">
+      <div class="rag-panel">
+        <template x-for="doc in ragDocuments" :key="doc.id">
+          <div class="rag-doc-item">
+            <i class="ph ph-file-text" style="font-size:16px; color:#8b5cf6; flex-shrink:0;"></i>
+            <div class="rag-doc-info">
+              <div class="rag-doc-name" x-text="doc.name"></div>
+              <div class="rag-doc-meta">
+                <span x-text="formatFileSize(doc.size)"></span> ·
+                <span x-text="doc.chunks < 0 ? 'indexing…' : doc.chunks + ' chunks'"
+                  :style="doc.chunks < 0 ? 'color:#f59e0b;font-weight:500' : ''"></span>
+              </div>
+            </div>
+            <button class="rag-doc-remove" @click="removeRagDocument(doc.id, doc.name)" title="Remove">
+              <i class="ph ph-x"></i>
+            </button>
+          </div>
+        </template>
+
+        <!-- Hidden file input -->
+        <!-- Accepts documents, code, data, and rich formats (PDF, DOCX, etc.) -->
+        <input type="file" x-ref="ragFileInput" @change="handleFileUpload($event)"
+          accept=".pdf,.docx,.doc,.rtf,.odt,.epub,.pptx,.xlsx,.xls,.txt,.md,.csv,.json,.jsonl,.html,.htm,.xml,.log,.py,.js,.jsx,.ts,.tsx,.c,.cc,.cpp,.h,.hpp,.java,.go,.rs,.rb,.php,.swift,.kt,.scala,.r,.sql,.sh,.bash,.zsh,.bat,.ps1,.yaml,.yml,.toml,.ini,.cfg,.conf,.env,.rst,.tex,.rtf,.org,.adoc,.wiki,.diff,.patch,.gitignore,.dockerfile,.makefile,.cmake,.gradle,.properties,.plist,.srt,.vtt,.ics,.bib,.css,.scss,.less,.sass,.vue,.svelte,.astro,.mdx,.tsv,.svg"
+          multiple style="display:none;" />
+
+        <button class="rag-upload-btn" @click="triggerFileUpload()" :disabled="isUploading">
+          <i class="ph ph-upload-simple" style="font-size:14px;"></i>
+          <span x-text="isUploading ? 'Uploading…' : 'Upload Documents'"></span>
+        </button>
+      </div>
+      </div><!-- /ragDocs collapsible -->
+      </div><!-- /.sidebar-scroll -->
+
+      <!-- Context window indicator -->
+      <div class="context-bar">
+        <div class="context-bar-label">
+          <span>Context</span>
+          <span x-text="contextTokens.toLocaleString() + ' / ' + maxContextTokens.toLocaleString() + ' tokens'"></span>
+        </div>
+        <div class="context-progress">
+          <div class="context-progress-fill" :class="{ warning: contextPercentage > 85 }"
+            :style="'width:' + contextPercentage + '%; background:' + contextColor">
+          </div>
+        </div>
+        <div class="context-warning-banner" x-show="contextPercentage > 85" x-transition>
+          <i class="ph ph-warning" style="font-size:12px;"></i>
+          <span>Context nearly full — consider starting a new chat</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══════════ MCP ADD MODAL ════════════════════════════════ -->
+    <div class="modal-overlay" x-show="showMcpModal" x-transition.opacity @click.self="closeMcpModal()">
+      <div class="modal-box" @click.stop>
+        <div class="modal-title">
+          <i class="ph ph-plugs-connected" style="font-size:22px;"></i>
+          Add MCP Server
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Server Name</label>
+          <input class="modal-input" type="text" x-model="mcpForm.name" placeholder="e.g. filesystem or zoho"
+            @keydown.enter="addMcpServer()" />
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Transport Type</label>
+          <div style="display:flex;gap:12px;margin-top:6px;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;">
+              <input type="radio" name="transport" value="stdio" x-model="mcpForm.transport" />
+              <span>Local (stdio)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;">
+              <input type="radio" name="transport" value="http" x-model="mcpForm.transport" />
+              <span>Remote (HTTP URL)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- stdio fields -->
+        <template x-if="mcpForm.transport === 'stdio'">
+          <div>
+            <div class="modal-field">
+              <label class="modal-label">Command</label>
+              <input class="modal-input" type="text" x-model="mcpForm.command" placeholder="e.g. npx"
+                @keydown.enter="addMcpServer()" />
+            </div>
+            <div class="modal-field">
+              <label class="modal-label">Arguments</label>
+              <input class="modal-input" type="text" x-model="mcpForm.args"
+                placeholder="e.g. -y @modelcontextprotocol/server-filesystem ./workspace"
+                @keydown.enter="addMcpServer()" />
+              <div class="modal-hint">Space-separated arguments passed to the command</div>
+            </div>
+          </div>
+        </template>
+
+        <!-- http fields -->
+        <template x-if="mcpForm.transport === 'http'">
+          <div class="modal-field">
+            <label class="modal-label">URL Endpoint</label>
+            <input class="modal-input" type="text" x-model="mcpForm.url"
+              placeholder="e.g. https://zoho-898749898.zohomcp.com/mcp/message?key=..."
+              @keydown.enter="addMcpServer()" />
+            <div class="modal-hint">HTTP endpoint for JSON-RPC 2.0 over POST (Streamable HTTP transport)</div>
+          </div>
+        </template>
+
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-cancel" @click="closeMcpModal()">Cancel</button>
+          <button class="modal-btn modal-btn-primary" @click="addMcpServer()">Add Server</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SYSTEM PROMPT MODAL ════════════════════════════ -->
+    <div class="modal-overlay" x-show="showSystemPromptModal" x-transition.opacity
+      @click.self="showSystemPromptModal = false">
+      <div class="modal-dialog" style="max-width:560px;" @click.stop>
+        <div class="modal-title">
+          <i class="ph ph-gear" style="color:var(--accent-color);"></i>
+          System Prompt
+        </div>
+        <p style="font-size:13px;color:#888;margin:0 0 12px;">
+          Customize how the AI behaves in this conversation. Leave empty for default behavior.
+        </p>
+        <textarea class="modal-input" x-model="editingSystemPrompt" rows="6"
+          style="resize:vertical;font-family:inherit;line-height:1.5;"
+          placeholder="e.g. You are a Python tutor. Explain concepts clearly with examples..."></textarea>
+        <div style="margin-top:8px;">
+          <span style="font-size:12px;color:#999;">Quick templates:</span>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
+            <template x-for="t in allPromptTemplates.filter(t => t.prompt)" :key="t.name">
+              <button class="template-quick-btn" @click="editingSystemPrompt = t.prompt">
+                <i class="ph" :class="t.icon" style="font-size:13px;"></i>
+                <span x-text="t.name"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-cancel" @click="showSystemPromptModal = false">Cancel</button>
+          <button class="modal-btn modal-btn-cancel" @click="editingSystemPrompt = ''"
+            x-show="editingSystemPrompt">Clear</button>
+          <button class="modal-btn modal-btn-primary" @click="saveSystemPrompt()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ TEMPLATE PICKER PANEL ═════════════════════════ -->
+    <div class="modal-overlay" x-show="showTemplatePanel" x-transition.opacity @click.self="showTemplatePanel = false">
+      <div class="modal-dialog" style="max-width:520px;" @click.stop>
+
+        <!-- ── View 1: Template Grid ── -->
+        <div x-show="!showAddTemplateForm">
+          <div class="modal-title">
+            <i class="ph ph-book-open-text" style="color:var(--accent-color);"></i>
+            Prompt Templates
+          </div>
+          <p style="font-size:13px;color:#888;margin:0 0 16px;">
+            Start a new conversation with a specialized AI persona.
+          </p>
+          <div class="template-grid">
+            <template x-for="t in allPromptTemplates" :key="t.name">
+              <button class="template-card" @click="applyTemplate(t)">
+                <span class="template-icon"><i class="ph" :class="t.icon"></i></span>
+                <span class="template-name" x-text="t.name"></span>
+                <span class="template-desc" x-text="t.description"></span>
+                <template x-if="t.custom">
+                  <span class="template-custom-badge">Custom</span>
+                </template>
+                <template x-if="t.custom">
+                  <button class="template-delete-btn" @click.stop="deleteCustomTemplate(t.name)"
+                    title="Delete template">
+                    <i class="ph ph-trash"></i>
+                  </button>
+                </template>
+              </button>
+            </template>
+            <!-- Add new template card -->
+            <button class="template-card template-card-add" @click.stop="showAddTemplateForm = true">
+              <span class="template-icon" style="background:rgba(34,197,94,0.1);color:#22c55e;"><i
+                  class="ph ph-plus"></i></span>
+              <span class="template-name">New Template</span>
+              <span class="template-desc">Create your own</span>
+            </button>
+          </div>
+          <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" @click="showTemplatePanel = false">Close</button>
+          </div>
+        </div>
+
+        <!-- ── View 2: New Template Form ── -->
+        <div x-show="showAddTemplateForm">
+          <div class="add-template-form" @click.stop>
+            <div class="form-header">
+              <button class="back-btn" @click="showAddTemplateForm = false" title="Back to templates">
+                <i class="ph ph-arrow-left"></i>
+              </button>
+              <span style="font-weight:600;font-size:15px;">New Template</span>
+            </div>
+            <input type="text" class="modal-input" x-model="newTemplate.name" placeholder="Template name"
+              style="margin:0 0 10px;padding:8px 10px;" />
+            <div style="margin-bottom:10px;">
+              <label style="font-size:11px;color:#999;margin-bottom:4px;display:block;">Icon</label>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <template x-for="ic in templateIcons" :key="ic">
+                  <button class="icon-picker-btn" :class="{ active: newTemplate.icon === ic }"
+                    @click.stop="newTemplate.icon = ic">
+                    <i class="ph" :class="ic"></i>
+                  </button>
+                </template>
+              </div>
+            </div>
+            <textarea class="modal-input" x-model="newTemplate.prompt" rows="4" placeholder="System prompt…"
+              style="margin:0 0 10px;resize:vertical;font-family:inherit;line-height:1.5;"></textarea>
+            <input type="text" class="modal-input" x-model="newTemplate.description"
+              placeholder="Short description (optional)" style="margin:0 0 14px;padding:8px 10px;" />
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+              <button class="modal-btn modal-btn-cancel" @click="showAddTemplateForm = false">Cancel</button>
+              <button class="modal-btn modal-btn-primary" @click="addCustomTemplate()">Add Template</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════ MODEL MANAGER MODAL (#13) ═════════════════════ -->
+    <div class="modal-overlay" x-show="showModelManager" x-transition.opacity @click.self="showModelManager = false">
+      <div class="modal-dialog" style="max-width:600px;" @click.stop>
+        <div class="modal-title">
+          <i class="ph ph-package" style="color:var(--accent-color);"></i>
+          Model Manager
+        </div>
+
+        <!-- Pull new model -->
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <input type="text" x-model="modelPullName" placeholder="Model name (e.g. llama3:8b)" class="modal-input"
+            style="flex:1;margin-bottom:0;" @keydown.enter.prevent="pullModel()" :disabled="isModelPulling" />
+          <button class="modal-btn modal-btn-primary" @click="pullModel()"
+            :disabled="isModelPulling || !modelPullName.trim()">
+            <i class="ph ph-download-simple"></i> Pull
+          </button>
+        </div>
+
+        <!-- Pull progress -->
+        <template x-if="modelPullProgress">
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;"
+              x-text="modelPullProgress.status"></div>
+            <div class="pull-progress-bar">
+              <div class="pull-progress-fill" :style="'width:' + modelPullProgress.percent + '%'"></div>
+            </div>
+            <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;text-align:right;"
+              x-show="modelPullProgress.percent > 0" x-text="modelPullProgress.percent + '%'"></div>
+          </div>
+        </template>
+
+        <!-- Installed models list -->
+        <div class="model-list">
+          <template x-for="m in modelDetails" :key="m.name">
+            <div class="model-card">
+              <i class="ph ph-cube" style="font-size:24px;color:var(--accent-color);flex-shrink:0;"></i>
+              <div class="model-card-info">
+                <div class="model-card-name" x-text="m.name"></div>
+                <div class="model-card-meta">
+                  <span><i class="ph ph-hard-drive"></i> <span x-text="formatModelSize(m.size)"></span></span>
+                  <span x-show="m.parameter_size"><i class="ph ph-stack"></i> <span
+                      x-text="m.parameter_size"></span></span>
+                  <span x-show="m.quantization_level"><i class="ph ph-tag"></i> <span
+                      x-text="m.quantization_level"></span></span>
+                  <span x-show="m.family"><i class="ph ph-tree-structure"></i> <span x-text="m.family"></span></span>
+                </div>
+              </div>
+              <button class="msg-action-btn" title="Delete model" @click="deleteModel(m.name)" style="color:#dc2626;">
+                <i class="ph ph-trash"></i>
+              </button>
+            </div>
+          </template>
+          <template x-if="modelDetails.length === 0">
+            <div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:13px;">
+              No models installed. Pull one above.
+            </div>
+          </template>
+        </div>
+
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-cancel" @click="showModelManager = false">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ TOKEN DASHBOARD MODAL (#17) ═══════════════════ -->
+    <div class="modal-overlay" x-show="showTokenDashboard" x-transition.opacity
+      @click.self="showTokenDashboard = false">
+      <div class="modal-dialog" style="max-width:440px;" @click.stop>
+        <div class="modal-title">
+          <i class="ph ph-chart-bar" style="color:#2563eb;"></i>
+          Token Usage
+        </div>
+
+        <!-- Last request stats -->
+        <template x-if="lastStats">
+          <div>
+            <div class="stats-section-title">Last Request</div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-icon amber"><i class="ph ph-lightning"></i></div>
+                <div class="stat-value" x-text="formatTokenSpeed(lastStats.tokens_per_sec)"></div>
+                <div class="stat-label">Speed</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon blue"><i class="ph ph-hash"></i></div>
+                <div class="stat-value" x-text="lastStats.eval_count || 0"></div>
+                <div class="stat-label">Generated</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon violet"><i class="ph ph-arrow-right"></i></div>
+                <div class="stat-value" x-text="lastStats.prompt_eval_count || 0"></div>
+                <div class="stat-label">Prompt</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon emerald"><i class="ph ph-timer"></i></div>
+                <div class="stat-value" x-text="formatDuration(lastStats.total_duration)"></div>
+                <div class="stat-label">Duration</div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template x-if="!lastStats">
+          <div class="token-empty-state">
+            <i class="ph ph-chart-bar"></i>
+            <p>No stats yet — send a message to see performance metrics.</p>
+          </div>
+        </template>
+
+        <!-- Session totals (compact bar) -->
+        <template x-if="sessionStats.requestCount > 0">
+          <div>
+            <div class="stats-section-title">Session</div>
+            <div class="session-bar">
+              <div class="sb-cell">
+                <div class="sb-val" x-text="sessionStats.requestCount"></div>
+                <div class="sb-lbl">Requests</div>
+              </div>
+              <div class="sb-cell">
+                <div class="sb-val" x-text="sessionStats.totalGenerated"></div>
+                <div class="sb-lbl">Generated</div>
+              </div>
+              <div class="sb-cell">
+                <div class="sb-val" x-text="sessionStats.totalPrompt"></div>
+                <div class="sb-lbl">Prompt</div>
+              </div>
+              <div class="sb-cell">
+                <div class="sb-val" x-text="formatDuration(sessionStats.totalDuration)"></div>
+                <div class="sb-lbl">Total Time</div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <div class="modal-actions" style="justify-content:flex-end;">
+          <button class="modal-btn modal-btn-primary" @click="showTokenDashboard = false">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SETTINGS PANEL (#38) ═══════════════════════════ -->
+    <div class="modal-overlay" x-show="showSettingsPanel" x-transition.opacity @click.self="closeSettingsPanel()">
+      <div class="modal-box" style="max-width:500px;" @click.stop>
+        <div class="modal-header">
+          <h2><i class="ph ph-gear" style="font-size:20px;"></i> Settings</h2>
+          <button class="modal-close" @click="closeSettingsPanel()">&times;</button>
+        </div>
+
+        <div class="settings-body">
+          <!-- Appearance -->
+          <div class="settings-section">
+            <div class="settings-section-title">Appearance</div>
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Theme</label>
+                <div class="settings-desc">Choose light, dark, or match your system preference</div>
+              </div>
+              <div class="settings-row-control">
+                <select class="settings-select" x-model="settings.theme" @change="applyTheme()">
+                  <option value="system">System</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Show Timestamps</label>
+                <div class="settings-desc">Display time next to each message</div>
+              </div>
+              <div class="settings-row-control">
+                <label class="settings-toggle">
+                  <input type="checkbox" x-model="settings.showTimestamps" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- General -->
+          <div class="settings-section">
+            <div class="settings-section-title">General</div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Default Model</label>
+                <div class="settings-desc">Model used for new conversations</div>
+              </div>
+              <div class="settings-row-control">
+                <select class="settings-select" x-model="settings.defaultModel">
+                  <option value="">Auto (first available)</option>
+                  <template x-for="m in models" :key="m">
+                    <option :value="m" x-text="m"></option>
+                  </template>
+                </select>
+              </div>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Temperature</label>
+                <div class="settings-desc">Controls randomness (0 = precise, 2 = creative)</div>
+              </div>
+              <div class="settings-row-control">
+                <div class="settings-range-row">
+                  <input type="range" min="0" max="2" step="0.05" x-model.number="temperature" />
+                  <span class="settings-range-value" x-text="temperature.toFixed(2)"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Chat Font Size</label>
+                <div class="settings-desc">Message text size in the chat area</div>
+              </div>
+              <div class="settings-row-control">
+                <div class="settings-range-row">
+                  <input type="range" min="12" max="22" step="1" x-model.number="settings.fontSize"
+                    @input="document.documentElement.style.setProperty('--chat-font-size', settings.fontSize + 'px')" />
+                  <span class="settings-range-value" x-text="settings.fontSize + 'px'"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Send on Enter</label>
+                <div class="settings-desc">Press Enter to send, Shift+Enter for new line</div>
+              </div>
+              <div class="settings-row-control">
+                <label class="settings-toggle">
+                  <input type="checkbox" x-model="settings.sendOnEnter" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div style="padding:10px 0 4px;">
+              <label style="font-size:13px;font-weight:500;">TTS Voice</label>
+              <div class="settings-desc" style="margin-bottom:10px;">Select a voice for read-aloud. Tap to preview.
+              </div>
+              <div class="voice-grid">
+                <template x-for="v in [
+                {name:'af_alloy',tag:'AF',desc:'American F'},{name:'af_aoede',tag:'AF',desc:'American F'},{name:'af_bella',tag:'AF',desc:'American F'},{name:'af_heart',tag:'AF',desc:'American F'},{name:'af_jessica',tag:'AF',desc:'American F'},{name:'af_kore',tag:'AF',desc:'American F'},{name:'af_nicole',tag:'AF',desc:'American F'},{name:'af_nova',tag:'AF',desc:'American F'},{name:'af_river',tag:'AF',desc:'American F'},{name:'af_sarah',tag:'AF',desc:'American F'},{name:'af_sky',tag:'AF',desc:'American F'},
+                {name:'am_adam',tag:'AM',desc:'American M'},{name:'am_echo',tag:'AM',desc:'American M'},{name:'am_eric',tag:'AM',desc:'American M'},{name:'am_fenrir',tag:'AM',desc:'American M'},{name:'am_liam',tag:'AM',desc:'American M'},{name:'am_michael',tag:'AM',desc:'American M'},{name:'am_onyx',tag:'AM',desc:'American M'},{name:'am_puck',tag:'AM',desc:'American M'},{name:'am_santa',tag:'AM',desc:'American M'},
+                {name:'bf_alice',tag:'BF',desc:'British F'},{name:'bf_emma',tag:'BF',desc:'British F'},{name:'bf_isabella',tag:'BF',desc:'British F'},{name:'bf_lily',tag:'BF',desc:'British F'},
+                {name:'bm_daniel',tag:'BM',desc:'British M'},{name:'bm_fable',tag:'BM',desc:'British M'},{name:'bm_george',tag:'BM',desc:'British M'},{name:'bm_lewis',tag:'BM',desc:'British M'},
+                {name:'ef_dora',tag:'EF',desc:'Spanish F'},{name:'em_alex',tag:'EM',desc:'Spanish M'},{name:'em_santa',tag:'EM',desc:'Spanish M'},
+                {name:'ff_siwis',tag:'FF',desc:'French F'},
+                {name:'hf_alpha',tag:'HF',desc:'Hindi F'},{name:'hf_beta',tag:'HF',desc:'Hindi F'},{name:'hm_omega',tag:'HM',desc:'Hindi M'},{name:'hm_psi',tag:'HM',desc:'Hindi M'},
+                {name:'if_sara',tag:'IF',desc:'Italian F'},{name:'im_nicola',tag:'IM',desc:'Italian M'},
+                {name:'jf_alpha',tag:'JF',desc:'Japanese F'},{name:'jf_gongitsune',tag:'JF',desc:'Japanese F'},{name:'jf_nezumi',tag:'JF',desc:'Japanese F'},{name:'jf_tebukuro',tag:'JF',desc:'Japanese F'},{name:'jm_kumo',tag:'JM',desc:'Japanese M'},
+                {name:'pf_dora',tag:'PF',desc:'Portuguese F'},{name:'pm_alex',tag:'PM',desc:'Portuguese M'},{name:'pm_santa',tag:'PM',desc:'Portuguese M'},
+                {name:'zf_xiaobei',tag:'ZF',desc:'Chinese F'},{name:'zf_xiaoni',tag:'ZF',desc:'Chinese F'},{name:'zf_xiaoxiao',tag:'ZF',desc:'Chinese F'},{name:'zf_xiaoyi',tag:'ZF',desc:'Chinese F'},{name:'zm_yunjian',tag:'ZM',desc:'Chinese M'},{name:'zm_yunxi',tag:'ZM',desc:'Chinese M'},{name:'zm_yunxia',tag:'ZM',desc:'Chinese M'},{name:'zm_yunyang',tag:'ZM',desc:'Chinese M'}
+              ]" :key="v.name">
+                  <button class="voice-card"
+                    :class="{ 'voice-card-selected': settings.ttsVoice === v.name, 'voice-card-playing': previewingVoice === v.name }"
+                    @click="settings.ttsVoice = v.name; previewVoice(v.name)">
+                    <span class="voice-card-tag" :class="'tag-' + v.name.substring(0,2)" x-text="v.tag"></span>
+                    <span class="voice-card-name" x-text="v.name.split('_')[1]"></span>
+                    <span class="voice-card-desc" x-text="v.desc"></span>
+                    <span class="voice-card-indicator">
+                      <template x-if="previewingVoice === v.name">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                          <rect x="6" y="4" width="4" height="16" rx="1" />
+                          <rect x="14" y="4" width="4" height="16" rx="1" />
+                        </svg>
+                      </template>
+                      <template x-if="previewingVoice !== v.name">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="6,4 20,12 6,20" />
+                        </svg>
+                      </template>
+                    </span>
+                  </button>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <!-- Memory -->
+          <div class="settings-section">
+            <div class="settings-section-title">Memory & Context</div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Auto-Extract Memory</label>
+                <div class="settings-desc">Automatically extract facts from conversations</div>
+              </div>
+              <div class="settings-row-control">
+                <label class="settings-toggle">
+                  <input type="checkbox" x-model="autoMemoryEnabled" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Max Context Tokens</label>
+                <div class="settings-desc">Maximum tokens sent to the model</div>
+              </div>
+              <div class="settings-row-control">
+                <div class="settings-range-row" style="min-width:160px;">
+                  <input type="range" min="1024" max="131072" step="1024" x-model.number="maxContextTokens"
+                    @change="diskStorage.setItem('localai_maxContextTokens', maxContextTokens)" />
+                  <span class="settings-range-value" x-text="maxContextTokens.toLocaleString()"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Management -->
+          <div class="settings-section">
+            <div class="settings-section-title">Data Management</div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Export All Data</label>
+                <div class="settings-desc">Backup conversations, memories, and settings</div>
+              </div>
+              <div class="settings-row-control">
+                <button class="settings-action-btn" @click="exportAllData()">
+                  <i class="ph ph-download-simple"></i> Export
+                </button>
+              </div>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Import Backup</label>
+                <div class="settings-desc">Restore from a previous backup file</div>
+              </div>
+              <div class="settings-row-control">
+                <label class="settings-action-btn" style="cursor:pointer;">
+                  <i class="ph ph-upload-simple"></i> Import
+                  <input type="file" accept=".json" @change="importAllData($event)" style="display:none;" />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="settings-danger-zone">
+            <div class="settings-section-title">Danger Zone</div>
+            <div class="settings-row">
+              <div class="settings-row-label">
+                <label>Clear All Data</label>
+                <div class="settings-desc">Permanently delete everything</div>
+              </div>
+              <div class="settings-row-control">
+                <button class="settings-danger-btn" @click="clearAllData()">
+                  <i class="ph ph-trash"></i> Clear All
+                </button>
+              </div>
+            </div>
+          </div>
+        </div><!-- /settings-body -->
+
+        <div class="modal-actions" style="margin-top:16px;">
+          <button class="modal-btn modal-btn-primary" @click="closeSettingsPanel()">Save & Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ KEYBOARD SHORTCUTS MODAL ═══════════════════════ -->
+    <div class="modal-overlay" x-show="showKeyboardShortcuts" x-transition.opacity
+      @click.self="showKeyboardShortcuts = false">
+      <div class="modal-box" style="max-width:520px;" @click.stop>
+        <div class="modal-header">
+          <h2><i class="ph ph-keyboard" style="font-size:20px;"></i> Keyboard Shortcuts</h2>
+          <button class="modal-close" @click="showKeyboardShortcuts = false">&times;</button>
+        </div>
+        <div class="shortcuts-grid">
+          <div class="shortcut-item">
+            <span>New chat</span>
+            <div class="shortcut-keys"><span class="kbd">⌘</span><span class="kbd">N</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>Search chats</span>
+            <div class="shortcut-keys"><span class="kbd">⌘</span><span class="kbd">F</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>Toggle sidebar</span>
+            <div class="shortcut-keys"><span class="kbd">⌘</span><span class="kbd">B</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>Send message</span>
+            <div class="shortcut-keys"><span class="kbd">Enter</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>New line</span>
+            <div class="shortcut-keys"><span class="kbd">⇧</span><span class="kbd">Enter</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>Stop generation</span>
+            <div class="shortcut-keys"><span class="kbd">Esc</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>Close modal</span>
+            <div class="shortcut-keys"><span class="kbd">Esc</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>Show shortcuts</span>
+            <div class="shortcut-keys"><span class="kbd">?</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>Navigate messages</span>
+            <div class="shortcut-keys"><span class="kbd">↑</span><span class="kbd">↓</span></div>
+          </div>
+          <div class="shortcut-item">
+            <span>Edit focused msg</span>
+            <div class="shortcut-keys"><span class="kbd">Enter</span></div>
+          </div>
+        </div>
+        <div class="modal-actions" style="margin-top:16px;">
+          <button class="modal-btn modal-btn-cancel" @click="showKeyboardShortcuts = false">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ MAIN AREA ══════════════════════════════════════ -->
+    <main id="main" @dragover.prevent="isDragging = true" @dragleave.self="isDragging = false"
+      @drop.prevent="handleDrop($event)">
+
+      <!-- Drag & Drop overlay -->
+      <div class="drag-overlay" x-show="isDragging" x-transition.opacity>
+        <i class="ph ph-cloud-arrow-up"></i>
+        <span>Drop files to upload to RAG</span>
+        <div class="drag-hint">Supported: PDF, TXT, MD, HTML, JSON, CSV</div>
+      </div>
+
+      <!-- Top navigation bar -->
+      <nav class="top-nav">
+        <div class="header-actions">
+          <button class="icon-btn header-toggle"
+            :style="sidebarCollapsed ? 'opacity:1;pointer-events:auto' : 'opacity:0;pointer-events:none'"
+            @click="toggleSidebar()">
+            <i class="ph ph-sidebar-simple"></i>
+          </button>
+          <button class="icon-btn header-new-chat"
+            :style="sidebarCollapsed ? 'opacity:1;pointer-events:auto' : 'opacity:0;pointer-events:none'"
+            @click="clearHistory()">
+            <i class="ph ph-pencil-simple"></i>
+          </button>
+        </div>
+        <div class="model-selector-badge">
+          <span>Local Global</span>
+          <span class="ws-status" :title="wsConnected ? 'Connected' : 'Reconnecting…'">
+            <span class="ws-dot" :class="wsConnected ? 'connected' : 'disconnected'"></span>
+            <span x-text="wsConnected ? 'Online' : 'Reconnecting'"></span>
+          </span>
+          <span class="persona-badge" x-show="getActiveTemplateName()" x-transition>
+            <i class="ph" :class="getActiveTemplateIcon()"></i>
+            <span x-text="getActiveTemplateName()"></span>
+          </span>
+        </div>
+        <div class="header-right-actions">
+          <button class="icon-btn" @click="showTokenDashboard = true" title="Token usage"
+            :style="lastStats ? 'color:#2563eb' : ''">
+            <i class="ph ph-chart-bar"></i>
+          </button>
+          <div style="position:relative;" x-data="{ showExport: false }">
+            <button class="icon-btn" @click="showExport = !showExport" title="Export conversation">
+              <i class="ph ph-export"></i>
+            </button>
+            <div class="export-menu" x-show="showExport" x-transition @click.outside="showExport = false">
+              <button @click="exportConversation('md'); showExport = false" aria-label="Export as Markdown">
+                <i class="ph ph-file-text" aria-hidden="true"></i> Markdown (.md)
+              </button>
+              <button @click="exportConversation('json'); showExport = false" aria-label="Export as JSON">
+                <i class="ph ph-file-code" aria-hidden="true"></i> JSON (.json)
+              </button>
+            </div>
+          </div>
+          <button class="icon-btn" @click="openSettingsPanel()" title="Settings">
+            <i class="ph ph-gear"></i>
+          </button>
+          <!-- Overflow menu — always visible -->
+          <div style="position:relative;" x-data="{ showOverflow: false }">
+            <button class="icon-btn" @click="showOverflow = !showOverflow" title="More actions">
+              <i class="ph ph-dots-three"></i>
+            </button>
+            <div class="header-overflow-menu" x-show="showOverflow" x-transition @click.outside="showOverflow = false">
+              <button @click="openModelManager(); showOverflow = false">
+                <i class="ph ph-package"></i> Model Manager
+              </button>
+              <button @click="showTemplatePanel = true; showOverflow = false">
+                <i class="ph ph-book-open-text"></i> Prompt Templates
+              </button>
+              <button @click="openSystemPromptModal(); showOverflow = false">
+                <i class="ph ph-chat-circle-dots"></i> System Prompt
+              </button>
+              <button @click="showKeyboardShortcuts = true; showOverflow = false">
+                <i class="ph ph-keyboard"></i> Keyboard Shortcuts
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Chat messages -->
+      <div id="chat-container" x-ref="chatContainer" role="log" aria-label="Chat messages" aria-live="polite"
+        @scroll.passive="handleChatScroll()">
+
+        <!-- Empty state -->
+        <div class="empty-state" x-show="messages.length === 0 && !isStreaming" x-transition>
+          <div class="spark-icon">
+            <svg viewBox="0 0 64 64" fill="none" width="48" height="48">
+              <ellipse cx="32" cy="32" rx="28" ry="10.5" transform="rotate(-30 32 32)" stroke="#6EE7B7"
+                stroke-opacity="0.35" stroke-width="1" />
+              <ellipse cx="32" cy="32" rx="24" ry="9.5" transform="rotate(25 32 32)" stroke="#34D399"
+                stroke-opacity="0.55" stroke-width="1.3" />
+              <ellipse cx="32" cy="32" rx="20" ry="8.5" transform="rotate(-55 32 32)" stroke="#10B981"
+                stroke-width="1.8" />
+              <circle cx="32" cy="32" r="6.5" fill="#10B981" opacity="0.15" />
+              <circle cx="32" cy="32" r="5" fill="#10B981" />
+              <circle cx="31" cy="31" r="2" fill="#6EE7B7" opacity="0.45" />
+              <circle cx="49" cy="14" r="2" fill="#34D399" />
+              <circle cx="49" cy="14" r="1.1" fill="#6EE7B7" />
+              <circle cx="14" cy="49" r="1.5" fill="#10B981" />
+              <circle cx="14" cy="49" r="0.8" fill="#34D399" />
+            </svg>
+          </div>
+          <p style="font-size:16px; color:var(--text-secondary); font-weight:500;">
+            Hello! I'm your Local Global assistant. How can I help you today?
+          </p>
+
+          <!-- Ollama setup banner — shown when no models are available -->
+          <div x-show="models.length === 0" x-transition
+            style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:16px 20px; margin:12px 0 16px; max-width:480px; text-align:left;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+              <i class="ph ph-warning-circle" style="font-size:20px; color:#f59e0b;"></i>
+              <strong style="font-size:14px; color:var(--text-primary);">Ollama not detected</strong>
+            </div>
+            <p style="font-size:13px; color:var(--text-secondary); margin:0 0 10px; line-height:1.5;">
+              This app uses <strong>Ollama</strong> to run AI models locally on your machine. To get started:
+            </p>
+            <ol style="font-size:13px; color:var(--text-secondary); margin:0 0 12px; padding-left:20px; line-height:1.8;">
+              <li>Download & install Ollama from
+                <a href="#" @click.prevent="window.openExternal && window.openExternal('https://ollama.com')"
+                  style="color:var(--accent-color); text-decoration:underline; cursor:pointer;">ollama.com</a>
+              </li>
+              <li>Launch the Ollama app (it runs in the menu bar)</li>
+              <li>Click <strong>Manage</strong> in the sidebar → pull a model (e.g. <code>llama3.2</code>)</li>
+            </ol>
+            <button class="suggestion-chip" @click="fetchModels()" style="font-size:12px;">
+              <i class="ph ph-arrows-clockwise"></i> Retry connection
+            </button>
+          </div>
+
+          <div class="suggestions-grid" x-show="models.length > 0">
+            <button class="suggestion-chip" @click="handleSuggestion('Explain quantum computing in simple terms')">
+              <i class="ph ph-atom"></i> Explain quantum computing
+            </button>
+            <button class="suggestion-chip"
+              @click="handleSuggestion('Write a Python script that reads a CSV file and creates a summary')">
+              <i class="ph ph-code"></i> Write a Python script
+            </button>
+            <button class="suggestion-chip" @click="handleSuggestion('What are 5 tips for better productivity?')">
+              <i class="ph ph-lightbulb"></i> Productivity tips
+            </button>
+            <button class="suggestion-chip"
+              @click="handleSuggestion('Compare the pros and cons of React vs Vue for a new project')">
+              <i class="ph ph-scales"></i> React vs Vue
+            </button>
+          </div>
+        </div>
+
+        <!-- Rendered messages -->
+        <template x-for="(msg, idx) in messages" :key="idx">
+          <div class="message-row">
+            <!-- Avatar -->
+            <div class="message-avatar" :class="msg.role === 'user' ? 'user-avatar' : ''">
+              <template x-if="msg.role === 'user'">
+                <span style="font-size:13px;">You</span>
+              </template>
+              <template x-if="msg.role !== 'user'">
+                <svg width="20" height="20" viewBox="0 0 64 64" fill="none">
+                  <ellipse cx="32" cy="32" rx="28" ry="10.5" transform="rotate(-30 32 32)" stroke="#6EE7B7"
+                    stroke-opacity="0.35" stroke-width="1.5" />
+                  <ellipse cx="32" cy="32" rx="24" ry="9.5" transform="rotate(25 32 32)" stroke="#34D399"
+                    stroke-opacity="0.55" stroke-width="2" />
+                  <ellipse cx="32" cy="32" rx="20" ry="8.5" transform="rotate(-55 32 32)" stroke="#10B981"
+                    stroke-width="2.5" />
+                  <circle cx="32" cy="32" r="6.5" fill="#10B981" opacity="0.15" />
+                  <circle cx="32" cy="32" r="5" fill="#10B981" />
+                  <circle cx="31" cy="31" r="2" fill="#6EE7B7" opacity="0.45" />
+                  <circle cx="49" cy="14" r="2.5" fill="#34D399" />
+                  <circle cx="14" cy="49" r="2" fill="#10B981" />
+                </svg>
+              </template>
+            </div>
+
+            <!-- Body -->
+            <div class="message-body">
+              <!-- User message: editable -->
+              <template x-if="msg.role === 'user' && editingMessageIdx === idx">
+                <div>
+                  <textarea class="edit-message-area" x-model="editMessageText"
+                    x-init="$nextTick(() => { $el.focus(); $el.style.height = $el.scrollHeight + 'px'; })"
+                    @input="autoResize($event)" @keydown.escape.prevent="cancelEditMessage()"
+                    @keydown.meta.enter.prevent="confirmEditMessage(idx)"
+                    @keydown.ctrl.enter.prevent="confirmEditMessage(idx)"></textarea>
+                  <div class="edit-message-actions">
+                    <button class="edit-msg-save" @click="confirmEditMessage(idx)">
+                      <i class="ph ph-paper-plane-tilt" style="font-size:11px;"></i> Save & Send
+                    </button>
+                    <button class="edit-msg-cancel" @click="cancelEditMessage()">Cancel</button>
+                  </div>
+                </div>
+              </template>
+              <!-- Thinking / Reasoning (collapsible, for saved messages) — placed ABOVE content to match streaming layout -->
+              <template x-if="msg.thinkingContent">
+                <div class="thinking-block">
+                  <button class="thinking-toggle" @click="$el.parentElement.classList.toggle('expanded')">
+                    <i class="ph ph-brain" style="font-size:14px; color:#a78bfa;"></i>
+                    <span>Thought process</span>
+                    <i class="ph ph-caret-down" style="font-size:12px; color:#999; margin-left:auto;"></i>
+                  </button>
+                  <div class="thinking-content" x-html="renderMarkdown(msg.thinkingContent)"></div>
+                </div>
+              </template>
+              <template x-if="!(msg.role === 'user' && editingMessageIdx === idx)">
+                <div class="message-content"
+                  x-html="msg.role === 'user' ? escapeHtml(msg.content) : renderMarkdown(msg.content)">
+                </div>
+              </template>
+              <template x-if="msg.stopped">
+                <div class="generation-stopped"><i class="ph ph-stop-circle"></i> generation stopped</div>
+              </template>
+              <!-- Message timestamp -->
+              <div class="message-timestamp" x-show="settings.showTimestamps && msg.timestamp"
+                x-text="msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : ''">
+              </div>
+              <!-- Word count & reading time for assistant messages -->
+              <template x-if="msg.role === 'assistant' && getMessageStats(msg.content)">
+                <div class="message-meta">
+                  <span><i class="ph ph-text-aa"></i> <span
+                      x-text="getMessageStats(msg.content).words + ' words'"></span></span>
+                  <span><i class="ph ph-clock"></i> <span x-text="getMessageStats(msg.content).readTime"></span></span>
+                </div>
+              </template>
+              <!-- Actions for assistant messages -->
+              <template x-if="msg.role === 'assistant'">
+                <div class="message-actions">
+                  <button class="msg-action-btn"
+                    :class="{ 'tts-active': ttsPlayingIdx === idx && !ttsPaused, 'tts-paused': ttsPlayingIdx === idx && ttsPaused }"
+                    :title="ttsPlayingIdx === idx ? (ttsPaused ? 'Resume reading' : 'Pause reading') : 'Read aloud'"
+                    @click="speakMessage(idx)">
+                    <i class="ph" :class="ttsPlayingIdx !== idx ? 'ph-speaker-high' : (ttsPaused ? 'ph-play' : 'ph-pause')"></i>
+                  </button>
+                  <button x-show="ttsPlayingIdx === idx" class="msg-action-btn tts-stop-btn" title="Stop reading"
+                    @click="stopSpeaking()">
+                    <i class="ph ph-stop"></i>
+                  </button>
+                  <button class="msg-action-btn" title="Copy" @click="copyMessage(msg.content)">
+                    <i class="ph ph-copy"></i>
+                  </button>
+                  <button class="msg-action-btn" :class="{ 'rated-up': msg.rating === 'up' }"
+                    title="Good response" @click="rateMessage(idx, 'up')" aria-label="Rate good">
+                    <i class="ph" :class="msg.rating === 'up' ? 'ph-thumbs-up-fill' : 'ph-thumbs-up'"></i>
+                  </button>
+                  <button class="msg-action-btn" :class="{ 'rated-down': msg.rating === 'down' }"
+                    title="Bad response" @click="rateMessage(idx, 'down')" aria-label="Rate bad">
+                    <i class="ph" :class="msg.rating === 'down' ? 'ph-thumbs-down-fill' : 'ph-thumbs-down'"></i>
+                  </button>
+                  <button class="msg-action-btn" title="Regenerate" @click="regenerateMessage(idx)">
+                    <i class="ph ph-arrows-clockwise"></i>
+                  </button>
+                  <button x-show="msg.toolRefused" class="retry-tools-btn" title="Retry with explicit tool-calling instructions"
+                    @click="retryWithTools(idx)">
+                    <i class="ph ph-plug" aria-hidden="true"></i>
+                    Retry with tools
+                  </button>
+                  <button class="msg-action-btn" title="Branch from here — fork conversation at this point"
+                    @click="branchFromMessage(idx)">
+                    <i class="ph ph-git-branch"></i>
+                  </button>
+                </div>
+              </template>
+              <!-- Branch action for user messages -->
+              <template x-if="msg.role === 'user'">
+                <div class="message-actions">
+                  <button class="msg-action-btn" title="Edit & resend" @click="startEditMessage(idx)">
+                    <i class="ph ph-pencil-simple"></i>
+                  </button>
+                  <button class="msg-action-btn" title="Copy" @click="copyMessage(msg.content)">
+                    <i class="ph ph-copy"></i>
+                  </button>
+                  <button class="msg-action-btn" title="Branch from here — fork conversation at this point"
+                    @click="branchFromMessage(idx)">
+                    <i class="ph ph-git-branch"></i>
+                  </button>
+                </div>
+              </template>
+
+              <!-- RAG Sources / Citations (collapsible) -->
+              <template x-if="msg.ragSources && msg.ragSources.length > 0">
+                <div class="rag-citations">
+                  <button class="rag-citations-toggle" @click="toggleAllSources(msg)">
+                    <i class="ph" :class="msg._sourcesCollapsed ? 'ph-caret-right' : 'ph-caret-down'"></i>
+                    <i class="ph ph-books" style="font-size:14px; color:#8b5cf6;"></i>
+                    <span x-text="'Sources & Citations (' + msg.ragSources.length + ' passages used)'"></span>
+                  </button>
+                  <div class="rag-citations-list" x-show="!msg._sourcesCollapsed" x-transition>
+                    <template x-for="(src, si) in msg.ragSources" :key="si">
+                      <div class="rag-citation-item">
+                        <div class="rag-citation-header" @click="toggleSource(msg, si)">
+                          <div class="rag-citation-badge" x-text="'[' + src.index + ']'"></div>
+                          <div class="rag-citation-title" x-text="src.title || src.source"></div>
+                          <div class="rag-citation-score"
+                            :style="'background:' + (src.score >= 70 ? '#dcfce7' : src.score >= 50 ? '#fef9c3' : '#fee2e2') + '; color:' + (src.score >= 70 ? '#166534' : src.score >= 50 ? '#854d0e' : '#991b1b')">
+                            <span x-text="src.score + '%'"></span>
+                          </div>
+                          <i class="ph" :class="src.expanded ? 'ph-caret-up' : 'ph-caret-down'"
+                            style="font-size:12px; color:#999; margin-left:auto;"></i>
+                        </div>
+                        <div class="rag-citation-preview" x-show="!src.expanded" x-text="src.text"></div>
+                        <div class="rag-citation-full" x-show="src.expanded" x-transition x-text="src.fullText"></div>
+                        <div class="rag-citation-source" x-show="src.source">
+                          <i class="ph ph-link-simple" style="font-size:11px;"></i>
+                          <span x-text="src.source"></span>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <!-- Search / RAG / MCP progress indicator -->
+        <template x-if="searchSteps.length > 0">
+          <div class="tool-status-row">
+            <div class="message-avatar" :style="'background:' + (_mcpProgress ? '#10b981' : searchSteps.length <= 2 ? '#8b5cf6' : '#2563eb')">
+              <i class="ph" :class="_mcpProgress ? 'ph-plugs-connected' : searchSteps.length <= 2 ? 'ph-files' : 'ph-globe'"
+                style="font-size:18px; color:#fff;"></i>
+            </div>
+            <div class="message-body">
+              <div class="search-progress">
+                <div class="search-progress-header">
+                  <i class="ph" :class="_mcpProgress ? 'ph-plugs-connected' : searchSteps.length <= 2 ? 'ph-files' : 'ph-magnifying-glass'"
+                    :style="'color:' + (_mcpProgress ? '#10b981' : searchSteps.length <= 2 ? '#8b5cf6' : '#2563eb')"></i>
+                  <span x-text="_mcpProgress ? 'MCP Tool Calls' : searchSteps.length <= 2 ? 'Document RAG' : 'Web Search & RAG'"></span>
+                </div>
+                <template x-for="(step, si) in searchSteps" :key="si">
+                  <div class="search-step" :class="step.state">
+                    <div class="step-icon" :class="step.state">
+                      <template x-if="step.state === 'pending'">
+                        <span style="color:#cbd5e1;">·</span>
+                      </template>
+                      <template x-if="step.state === 'active'">
+                        <div class="step-spinner"></div>
+                      </template>
+                      <template x-if="step.state === 'done'">
+                        <i class="ph ph-check" style="font-size:12px;"></i>
+                      </template>
+                    </div>
+                    <span class="step-label" x-text="step.label"></span>
+                  </div>
+                </template>
+                <div class="search-progress-elapsed" x-show="searchElapsed">
+                  <i class="ph ph-timer" style="font-size:12px;"></i>
+                  <span x-text="searchElapsed"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Streaming bot message (live tokens) -->
+        <template x-if="isStreaming && (streamingContent || isThinking) && searchSteps.length === 0">
+          <div class="message-row">
+            <div class="message-avatar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962l6.135-1.582a2 2 0 0 0 1.437-1.437l1.582-6.135a.5.5 0 0 1 .962 0l1.582 6.135a2 2 0 0 0 1.437 1.437l6.135 1.582a.5.5 0 0 1 0 .962l-6.135 1.582a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0l-1.582-6.135Z" />
+                <path d="M20 3v4" />
+                <path d="M22 5h-4" />
+                <path d="M4 17v2" />
+                <path d="M5 18H3" />
+              </svg>
+            </div>
+            <div class="message-body">
+              <!-- Thinking indicator (collapsible) while model is reasoning -->
+              <template x-if="isThinking || pendingThinkingContent">
+                <div class="thinking-block" :class="{ 'thinking-active': isThinking }">
+                  <button class="thinking-toggle" @click="$el.parentElement.classList.toggle('expanded')">
+                    <div class="thinking-spinner" x-show="isThinking"></div>
+                    <i class="ph ph-brain" style="font-size:14px; color:#a78bfa;"></i>
+                    <span x-text="isThinking ? 'Thinking…' : 'Thought process'"></span>
+                    <i class="ph ph-caret-down" style="font-size:12px; color:#999; margin-left:auto;"></i>
+                  </button>
+                  <div class="thinking-content" x-html="renderMarkdown(thinkingContent || pendingThinkingContent)"
+                    x-effect="if (isThinking) { $el.scrollTop = $el.scrollHeight; }"></div>
+                </div>
+              </template>
+              <div class="message-content" x-show="streamingContent">
+                <span x-html="renderMarkdown(streamingContent)"></span><span class="streaming-cursor"></span>
+              </div>
+              <!-- Waiting for first content token after thinking -->
+              <div class="message-content typing-indicator" x-show="isThinking && !streamingContent"
+                style="margin-top:4px;">
+                <span></span><span></span><span></span>
+              </div>
+              <!-- Show RAG sources while streaming too -->
+              <template x-if="pendingRagSources.length > 0">
+                <div class="rag-citations" style="margin-top:8px; opacity:0.8;">
+                  <div class="rag-citations-toggle" style="cursor:default;">
+                    <i class="ph ph-books" style="font-size:14px; color:#8b5cf6;"></i>
+                    <span x-text="'Grounded on ' + pendingRagSources.length + ' passages'"></span>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <!-- Typing indicator (waiting for first token, only when NOT thinking) -->
+        <template x-if="isStreaming && !streamingContent && !isThinking && searchSteps.length === 0">
+          <div class="message-row">
+            <div class="message-avatar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962l6.135-1.582a2 2 0 0 0 1.437-1.437l1.582-6.135a.5.5 0 0 1 .962 0l1.582 6.135a2 2 0 0 0 1.437 1.437l6.135 1.582a.5.5 0 0 1 0 .962l-6.135 1.582a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0l-1.582-6.135Z" />
+                <path d="M20 3v4" />
+                <path d="M22 5h-4" />
+                <path d="M4 17v2" />
+                <path d="M5 18H3" />
+              </svg>
+            </div>
+            <div class="message-body">
+              <div class="message-content typing-indicator">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Inline token stats (shown after generation completes) -->
+        <template x-if="!isStreaming && lastStats && lastStats.eval_count > 0">
+          <div class="inline-stats" style="padding:0 60px;">
+            <span><i class="ph ph-lightning" style="color:#f59e0b;"></i> <span
+                x-text="formatTokenSpeed(lastStats.tokens_per_sec)"></span></span>
+            <span><i class="ph ph-hash"></i> <span x-text="lastStats.eval_count + ' tokens'"></span></span>
+            <span><i class="ph ph-timer"></i> <span x-text="formatDuration(lastStats.total_duration)"></span></span>
+          </div>
+        </template>
+      </div>
+
+      <!-- Scroll-to-bottom FAB -->
+      <button class="scroll-fab" :class="{ visible: userScrolledUp }" @click="scrollToBottom(true)"
+        title="Scroll to bottom">
+        <i class="ph ph-arrow-down"></i>
+      </button>
+
+      <!-- Input bar (fixed at bottom) -->
+      <div class="input-wrapper">
+        <div class="input-container">
+          <!-- Search-active indicator -->
+          <div class="search-active-banner" x-show="webSearchEnabled" x-transition>
+            <i class="ph ph-globe"></i>
+            <span>Web search enabled — results will be fetched before answering</span>
+          </div>
+          <!-- RAG-active indicator -->
+          <div class="rag-active-banner" x-show="ragEnabled && ragDocuments.length > 0 && !webSearchEnabled"
+            x-transition>
+            <i class="ph ph-files"></i>
+            <span
+              x-text="'RAG enabled — ' + ragDocuments.length + ' document' + (ragDocuments.length !== 1 ? 's' : '') + ' (' + ragTotalChunks + ' chunks) will ground answers'"></span>
+          </div>
+          <!-- Upload progress -->
+          <div class="upload-progress-bar" x-show="isUploading" x-transition>
+            <div class="upload-spinner"></div>
+            <span x-text="uploadProgress"></span>
+          </div>
+          <!-- Stop generation -->
+          <div style="display:flex;justify-content:center;margin-bottom:8px;" x-show="isStreaming" x-transition>
+            <button class="stop-btn" @click="stopGeneration()" aria-label="Stop generating (Escape)">
+              <i class="ph ph-stop-circle" aria-hidden="true"></i>
+              Stop generating
+              <span class="kbd-hint" aria-hidden="true">Esc</span>
+            </button>
+          </div>
+          <div class="input-bar">
+            <textarea x-ref="inputBox" x-model="inputText"
+              @keydown.enter.prevent="if (settings.sendOnEnter && !$event.shiftKey) sendMessage(); else if (!settings.sendOnEnter && ($event.metaKey || $event.ctrlKey)) sendMessage(); else { const s=$refs.inputBox.selectionStart; inputText=inputText.slice(0,s)+'\n'+inputText.slice(s); $nextTick(()=>{$refs.inputBox.selectionStart=$refs.inputBox.selectionEnd=s+1;autoResize({target:$refs.inputBox})}); }"
+              @input="autoResize($event)"
+              @paste="$nextTick(() => { inputText = $refs.inputBox.value; autoResize({ target: $refs.inputBox }); })"
+              :disabled="isStreaming" rows="1" aria-label="Message input"
+              :placeholder="settings.sendOnEnter ? 'Send a message (Enter to send, Shift+Enter for new line)' : 'Send a message (⌘+Enter to send)'"></textarea>
+            <div class="input-actions">
+              <!-- File upload button -->
+              <button class="action-btn rag-toggle" :class="{ active: ragEnabled && ragDocuments.length > 0 }"
+                @click="ragDocuments.length > 0 ? (ragEnabled = !ragEnabled) : triggerFileUpload()"
+                :title="ragDocuments.length > 0 ? (ragEnabled ? 'Disable RAG context' : 'Enable RAG context') : 'Upload a document for RAG'"
+                :aria-label="ragDocuments.length > 0 ? (ragEnabled ? 'Disable RAG context' : 'Enable RAG context') : 'Upload a document for RAG'">
+                <i class="ph" :class="ragDocuments.length > 0 ? 'ph-files' : 'ph-paperclip'" aria-hidden="true"></i>
+              </button>
+              <button class="action-btn search-toggle" :class="{ active: webSearchEnabled }"
+                @click="webSearchEnabled = !webSearchEnabled" title="Toggle web search"
+                :aria-pressed="webSearchEnabled.toString()">
+                <i class="ph ph-globe" aria-hidden="true"></i>
+              </button>
+              <button class="action-btn send-btn" :disabled="isStreaming || !inputText.trim()" @click="sendMessage()"
+                aria-label="Send message">
+                <i class="ph ph-arrow-up" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <div class="input-token-counter" :class="{ visible: inputText.length > 0 }"
+            x-show="inputText.length > 0" x-transition>
+            <span x-text="'~' + inputTokenEstimate + ' tokens'"></span>
+          </div>
+        </div>
+        <div class="footer-note">
+          Powered by Ollama · running entirely on your machine
+        </div>
+      </div>
+    </main>
+
+    <!-- Custom confirm modal (replaces window.confirm) -->
+    <template x-if="confirmVisible">
+      <div class="modal-overlay" style="z-index:10000" @click.self="resolveConfirm(false)">
+        <div class="modal-box" style="width:380px;">
+          <div class="confirm-message" x-text="confirmMessage"></div>
+          <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" @click="resolveConfirm(false)">Cancel</button>
+            <button class="modal-btn confirm-btn-danger" @click="resolveConfirm(true)">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</body>
+
+</html>

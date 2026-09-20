@@ -1,0 +1,14 @@
+.DS_Store
+.vscode/
+build/
+cmake-build-*/
+myapp/mcp_servers.json
+myapp/models/kitten-tts/
+myapp/tts_venv/
+app_storage/
+rag_storage/
+*.db
+*.dmg
+*.log
+__pycache__/
+

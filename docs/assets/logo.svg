@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- 
+    Local Global — App Logo
+    Concept: A central "local" node with orbital rings representing "global" reach.
+    The inner shield-shape subtly conveys privacy/protection.
+  -->
+  <defs>
+    <linearGradient id="grad-ring1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="grad-ring2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="grad-ring3" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6EE7B7" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.12"/>
+    </linearGradient>
+    <linearGradient id="grad-core" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="grad-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded square (for app icon usage) -->
+  <rect width="512" height="512" rx="112" fill="url(#grad-bg)"/>
+
+  <!-- Outer orbital ring (tilted ellipse) -->
+  <ellipse cx="256" cy="256" rx="176" ry="68" transform="rotate(-30 256 256)"
+    stroke="url(#grad-ring3)" stroke-width="3" fill="none"/>
+
+  <!-- Middle orbital ring -->
+  <ellipse cx="256" cy="256" rx="152" ry="62" transform="rotate(25 256 256)"
+    stroke="url(#grad-ring2)" stroke-width="4.5" fill="none"/>
+
+  <!-- Inner orbital ring (prominent) -->
+  <ellipse cx="256" cy="256" rx="128" ry="56" transform="rotate(-55 256 256)"
+    stroke="url(#grad-ring1)" stroke-width="6" fill="none"/>
+
+  <!-- Central node — the "local" point -->
+  <!-- Outer glow -->
+  <circle cx="256" cy="256" r="42" fill="#10B981" opacity="0.12"/>
+  <circle cx="256" cy="256" r="34" fill="#10B981" opacity="0.2"/>
+  <!-- Core circle -->
+  <circle cx="256" cy="256" r="26" fill="url(#grad-core)"/>
+  <!-- Inner highlight -->
+  <circle cx="250" cy="250" r="10" fill="#6EE7B7" opacity="0.5"/>
+
+  <!-- Satellite nodes on the orbits -->
+  <!-- Node 1 — top-right -->
+  <circle cx="358" cy="146" r="9" fill="#34D399"/>
+  <circle cx="358" cy="146" r="5" fill="#6EE7B7"/>
+
+  <!-- Node 2 — bottom-left -->
+  <circle cx="148" cy="358" r="7" fill="#10B981"/>
+  <circle cx="148" cy="358" r="3.5" fill="#34D399"/>
+
+  <!-- Node 3 — right -->
+  <circle cx="392" cy="294" r="6" fill="#059669"/>
+  <circle cx="392" cy="294" r="3" fill="#10B981"/>
+
+  <!-- Node 4 — top-left -->
+  <circle cx="164" cy="170" r="5" fill="#34D399" opacity="0.7"/>
+  <circle cx="164" cy="170" r="2.5" fill="#6EE7B7" opacity="0.7"/>
+</svg>

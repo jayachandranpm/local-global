@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local Global — Free, Private AI That Runs on Your Mac</title>
+  <meta name="description" content="A free, fully offline AI assistant for macOS. Chat, write, research, learn — with complete privacy. No subscriptions, no cloud, no data collection. Works without internet." />
+  <meta name="theme-color" content="#0A0A0A" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Local Global — Free, Private AI for macOS" />
+  <meta property="og:description" content="Your own AI that runs 100% on your Mac. No subscriptions, no data collection. Free forever." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://raw.githubusercontent.com/YOUR_USERNAME/local-global/main/docs/assets/og-image.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       OPTION 2 — TECHNICAL ELEGANCE (GitHub / Vercel / Tailwind)
+       Dark mode, monospace accents, glass-morphism, precision.
+       ═══════════════════════════════════════════════════════════ */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #10B981;
+      --primary-light: #34D399;
+      --primary-dark: #059669;
+      --primary-bg: rgba(16,185,129,0.08);
+      --accent: #8B5CF6;
+      --accent-bg: rgba(139,92,246,0.08);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --bg: #0A0A0A;
+      --bg-elevated: #111111;
+      --bg-card: #161616;
+      --bg-card-hover: #1A1A1A;
+      --bg-surface: #0F0F0F;
+      --text: #EDEDED;
+      --text-secondary: #A1A1A1;
+      --text-tertiary: #666666;
+      --border: #222222;
+      --border-hover: #333333;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+      --glow: 0 0 60px rgba(16,185,129,0.08);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+      --glass: rgba(22,22,22,0.7);
+      --mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    body {
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.06) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    /* ─── Scrollbar ─────────────────────────────── */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+    /* ─── Container ─────────────────────────────── */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+    .container-narrow { max-width: 800px; margin: 0 auto; padding: 0 32px; }
+
+    /* ─── Navigation ────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,10,0.7);
+      backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    nav.scrolled { background: rgba(10,10,10,0.9); }
+
+    .nav-inner {
+      max-width: 1140px; margin: 0 auto; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-weight: 600; font-size: 15px;
+      color: var(--text); text-decoration: none; letter-spacing: -0.01em;
+    }
+    .nav-logo-icon {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 400;
+      color: var(--text-secondary); text-decoration: none;
+      padding: 6px 12px; border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .nav-links .btn-primary {
+      background: var(--primary); color: #000; font-weight: 600;
+      padding: 6px 14px; border-radius: 6px; font-size: 13px;
+      border: none;
+    }
+    .nav-links .btn-primary:hover { background: var(--primary-light); }
+
+    /* ─── Buttons ──────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 22px; border-radius: var(--radius-sm); font-size: 14px;
+      font-weight: 500; text-decoration: none; transition: all 0.2s;
+      border: 1px solid transparent; cursor: pointer; font-family: inherit;
+    }
+    .btn-hero {
+      background: var(--primary); color: #000; font-weight: 600;
+      box-shadow: 0 0 20px rgba(16,185,129,0.2);
+    }
+    .btn-hero:hover {
+      background: var(--primary-light);
+      box-shadow: 0 0 30px rgba(16,185,129,0.3);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--border-hover); background: rgba(255,255,255,0.03);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: transparent; color: var(--text-secondary);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover {
+      color: var(--text); border-color: var(--border-hover);
+    }
+    .btn i { font-size: 18px; }
+    .btn-sm { padding: 8px 16px; font-size: 13px; }
+    .btn-sm i { font-size: 16px; }
+
+    /* ─── Hero ─────────────────────────────────── */
+    .hero {
+      padding: 180px 0 120px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(16,185,129,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 100px;
+      background: rgba(16,185,129,0.08); color: var(--primary);
+      font-size: 12px; font-weight: 500; margin-bottom: 32px;
+      border: 1px solid rgba(16,185,129,0.15);
+      font-family: var(--mono);
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--primary);
+      animation: pulse-dot 2s infinite;
+      box-shadow: 0 0 8px rgba(16,185,129,0.5);
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(16,185,129,0.5); }
+      50% { opacity: 0.5; box-shadow: 0 0 16px rgba(16,185,129,0.3); }
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 6.5vw, 72px);
+      font-weight: 700; line-height: 1.08;
+      letter-spacing: -0.04em; margin-bottom: 24px;
+      color: var(--text);
+    }
+    .hero h1 br + * { color: var(--primary); }
+
+    .hero-subtitle {
+      font-size: 18px; color: var(--text-secondary); font-weight: 400;
+      max-width: 540px; margin: 0 auto 16px; line-height: 1.65;
+    }
+
+    .hero-desc {
+      font-size: 15px; color: var(--text-tertiary); font-weight: 400;
+      max-width: 500px; margin: 0 auto 44px; line-height: 1.7;
+    }
+
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+
+    .hero-stats {
+      display: flex; justify-content: center; gap: 1px;
+      margin-top: 72px; flex-wrap: wrap;
+      background: var(--border); border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .hero-stat {
+      text-align: center;
+      background: var(--bg-card);
+      padding: 24px 32px;
+      flex: 1; min-width: 140px;
+    }
+    .hero-stat .number {
+      font-size: 28px; font-weight: 700; color: var(--text);
+      font-family: var(--mono); letter-spacing: -0.02em;
+    }
+    .hero-stat .label {
+      font-size: 11px; font-weight: 500; color: var(--text-tertiary);
+      margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    /* ─── Section ──────────────────────────────── */
+    section { padding: 100px 0; border-top: 1px solid var(--border); }
+    section:nth-child(even) { background: var(--bg-elevated); }
+    section:nth-child(odd) { background: var(--bg); }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.08em; color: var(--primary); margin-bottom: 16px;
+      text-transform: uppercase; font-family: var(--mono);
+    }
+    .section-label i { font-size: 14px; }
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 16px;
+      color: var(--text);
+    }
+    .section-desc {
+      font-size: 16px; font-weight: 400; color: var(--text-secondary);
+      max-width: 580px; line-height: 1.65;
+    }
+
+    /* ─── Personas Grid ────────────────────────── */
+    .personas-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px; margin-top: 48px;
+      background: var(--border); border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+
+    .persona-card {
+      padding: 28px;
+      background: var(--bg-card);
+      transition: all 0.2s;
+    }
+    .persona-card:hover { background: var(--bg-card-hover); }
+
+    .persona-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 16px;
+    }
+
+    .persona-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .persona-card .persona-who {
+      font-size: 11px; font-weight: 500; color: var(--primary);
+      margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em;
+      font-family: var(--mono);
+    }
+    .persona-card p { font-size: 13px; font-weight: 400; color: var(--text-secondary); line-height: 1.6; }
+    .persona-card ul { margin-top: 12px; padding-left: 0; list-style: none; }
+    .persona-card ul li {
+      font-size: 12px; font-weight: 400; color: var(--text-tertiary);
+      padding: 2px 0; padding-left: 16px; position: relative;
+      font-family: var(--mono);
+    }
+    .persona-card ul li::before {
+      content: '›'; position: absolute; left: 0; color: var(--primary); font-weight: 700;
+    }
+
+    /* ─── Features Grid ────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: 1px; margin-top: 48px;
+      background: var(--border); border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+
+    .feature-card {
+      padding: 28px;
+      background: var(--bg-card);
+      transition: all 0.2s;
+    }
+    .feature-card:hover { background: var(--bg-card-hover); }
+
+    .feature-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 16px;
+    }
+    .feature-icon.purple { background: rgba(139,92,246,0.15); color: #A78BFA; }
+    .feature-icon.cyan   { background: rgba(6,182,212,0.15); color: #22D3EE; }
+    .feature-icon.green  { background: rgba(16,185,129,0.15); color: #34D399; }
+    .feature-icon.amber  { background: rgba(245,158,11,0.15); color: #FBBF24; }
+    .feature-icon.pink   { background: rgba(236,72,153,0.15); color: #F472B6; }
+    .feature-icon.red    { background: rgba(239,68,68,0.15); color: #F87171; }
+
+    .feature-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+    .feature-card p  { font-size: 13px; font-weight: 400; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ─── Comparison Table ─────────────────────── */
+    .comparison-wrapper {
+      margin-top: 48px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg-card);
+    }
+    .comparison-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .comparison-table thead th {
+      padding: 14px 20px;
+      font-weight: 500; font-size: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-tertiary);
+      text-transform: uppercase; letter-spacing: 0.05em;
+      font-family: var(--mono);
+    }
+    .comparison-table thead th:nth-child(2) { color: var(--primary); }
+    .comparison-table tbody td {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 400; color: var(--text-secondary);
+      vertical-align: top;
+    }
+    .comparison-table tbody tr:last-child td { border-bottom: none; }
+    .comparison-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+    .comparison-table tbody td:first-child {
+      font-weight: 500; color: var(--text);
+      font-family: var(--mono); font-size: 12px;
+    }
+    .check { color: var(--primary); font-weight: 500; }
+    .cross { color: var(--error); font-weight: 400; }
+
+    /* ─── Dual Install Track ──────────────────── */
+    .install-tracks {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 48px;
+    }
+    .install-track {
+      padding: 28px; border-radius: var(--radius);
+      border: 1px solid var(--border); background: var(--bg-card);
+    }
+    .install-track.easy { border-color: rgba(16,185,129,0.25); }
+    .install-track.dev  { border-color: rgba(245,158,11,0.25); }
+    .install-track-badge {
+      display: inline-block;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 16px; font-family: var(--mono);
+    }
+    .install-track.easy .install-track-badge { background: var(--primary-bg); color: var(--primary); }
+    .install-track.dev .install-track-badge { background: rgba(245,158,11,0.1); color: var(--warning); }
+    .install-track h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+    .install-track p { font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--text-secondary); margin-bottom: 20px; }
+    .install-track ol {
+      padding-left: 0; margin: 0 0 24px; list-style: none; counter-reset: steps;
+    }
+    .install-track ol li {
+      counter-increment: steps;
+      font-size: 13px; font-weight: 400; padding: 6px 0;
+      padding-left: 28px; position: relative; color: var(--text-secondary);
+    }
+    .install-track ol li::before {
+      content: counter(steps);
+      position: absolute; left: 0; top: 6px;
+      width: 20px; height: 20px;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-weight: 600; font-size: 11px; color: var(--text-tertiary);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+    }
+
+    .cmd-block {
+      padding: 14px 18px; border-radius: var(--radius-sm);
+      background: #0D0D0D; color: var(--primary);
+      border: 1px solid var(--border);
+      font-family: var(--mono); font-size: 13px; font-weight: 400;
+      margin: 8px 0; overflow-x: auto; white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ─── Privacy Banner ──────────────────────── */
+    .privacy-banner {
+      display: flex; align-items: flex-start; gap: 20px;
+      padding: 28px; border-radius: var(--radius);
+      background: rgba(16,185,129,0.04);
+      border: 1px solid rgba(16,185,129,0.12);
+      margin-top: 48px;
+    }
+    .privacy-banner-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(16,185,129,0.1); color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .privacy-banner h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .privacy-banner p { font-size: 13px; font-weight: 400; color: var(--text-secondary); line-height: 1.65; }
+
+    /* ─── Architecture ────────────────────────── */
+    .neo-arch-wrapper {
+      margin-top: 48px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px 32px 32px;
+      position: relative;
+      box-shadow: var(--glow);
+      font-family: var(--mono); color: var(--text); overflow: hidden;
+    }
+    .neo-arch-badge {
+      position: absolute; top: 0; left: 0;
+      background: var(--primary); color: #000;
+      padding: 6px 14px; font-weight: 600; font-size: 11px;
+      border-bottom-right-radius: var(--radius-sm);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .neo-row {
+      display: flex; gap: 16px; justify-content: center; align-items: stretch;
+      flex-wrap: wrap; position: relative; z-index: 2;
+    }
+    .neo-box {
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 20px;
+      background: var(--bg-elevated); box-shadow: var(--shadow);
+      flex: 1; min-width: 220px; max-width: 300px;
+      transition: all 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .neo-box:hover {
+      border-color: var(--border-hover); box-shadow: var(--shadow-md);
+    }
+    .neo-box.yellow { border-left: 2px solid var(--warning); }
+    .neo-box.blue   { border-left: 2px solid #22D3EE; }
+    .neo-box.pink   { border-left: 2px solid #F472B6; }
+    .neo-box.green  { border-left: 2px solid var(--primary); }
+    .neo-box.purple { border-left: 2px solid var(--accent); }
+
+    .neo-box-header {
+      font-weight: 600; font-size: 13px; margin-bottom: 12px;
+      border-bottom: 1px solid var(--border); padding-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text); text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .neo-box-header i { font-size: 16px; color: var(--primary); }
+    .neo-box-content { font-size: 12px; font-weight: 400; line-height: 1.6; flex-grow: 1; color: var(--text-secondary); font-family: 'Inter', sans-serif; }
+
+    .neo-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .neo-tag {
+      border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px;
+      font-size: 10px; font-weight: 500; color: var(--text-tertiary);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+
+    .neo-connector-h {
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      gap: 8px; font-weight: 500; font-size: 10px; color: var(--text-tertiary);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .neo-arrow-group { display: flex; align-items: center; gap: 6px; }
+    .neo-line-h { height: 1px; width: 40px; background: var(--border-hover); }
+    .neo-head-r { width: 0; height: 0; border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-left: 6px solid var(--border-hover); }
+    .neo-head-l { width: 0; height: 0; border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-right: 6px solid var(--border-hover); }
+
+    .neo-connection-tree {
+      display: flex; flex-direction: column; align-items: center;
+      margin: 20px 0; position: relative; z-index: 1;
+    }
+    .neo-trunk { width: 1px; height: 28px; background: var(--border-hover); }
+    .neo-branches { width: 66%; height: 1px; background: var(--border-hover); display: flex; justify-content: space-between; }
+    .neo-twig { width: 1px; height: 20px; background: var(--border-hover); position: relative; top: 1px; }
+    .neo-twig::after {
+      content: ''; position: absolute; bottom: -5px; left: -3px;
+      border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 5px solid var(--border-hover);
+    }
+    .neo-mobile-arrow { display: none; text-align: center; margin: 20px 0; color: var(--text-tertiary); }
+
+    /* ─── Tech Stack ──────────────────────────── */
+    .stack-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: 1px; margin-top: 40px;
+      background: var(--border); border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .stack-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      transition: all 0.2s;
+    }
+    .stack-item:hover { background: var(--bg-card-hover); }
+    .stack-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .stack-item-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .stack-item-desc { font-size: 11px; font-weight: 400; color: var(--text-tertiary); }
+
+    /* ─── FAQ ──────────────────────────────────── */
+    .faq-list {
+      margin-top: 48px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 16px 20px;
+      font-size: 14px; font-weight: 500;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; user-select: none;
+      transition: background 0.2s; color: var(--text);
+    }
+    .faq-question:hover { background: var(--bg-card-hover); }
+    .faq-question i { font-size: 14px; transition: transform 0.3s; flex-shrink: 0; color: var(--text-tertiary); }
+    .faq-item.open .faq-question i { transform: rotate(180deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-item.open .faq-answer { max-height: 500px; }
+    .faq-answer-inner {
+      padding: 0 20px 16px;
+      font-size: 13px; font-weight: 400; color: var(--text-secondary);
+      line-height: 1.7; border-top: 1px solid var(--border); padding-top: 14px;
+    }
+    .faq-answer-inner a { color: var(--primary); font-weight: 500; }
+    .faq-answer-inner code {
+      background: var(--bg); padding: 2px 6px; border-radius: 4px;
+      font-family: var(--mono); font-size: 12px;
+      border: 1px solid var(--border); color: var(--primary);
+    }
+
+    /* ─── CTA ──────────────────────────────────── */
+    .cta-section {
+      padding: 120px 0; text-align: center;
+      background: var(--bg);
+      position: relative; overflow: hidden;
+      border-top: 1px solid var(--border);
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 500px;
+      background: radial-gradient(ellipse, rgba(16,185,129,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-size: clamp(32px, 5vw, 48px); font-weight: 700;
+      letter-spacing: -0.03em; margin-bottom: 16px;
+      color: var(--text); position: relative;
+    }
+    .cta-section p {
+      font-size: 16px; font-weight: 400; color: var(--text-secondary);
+      max-width: 460px; margin: 0 auto 40px;
+      background: transparent; border: none; box-shadow: none; padding: 0;
+      position: relative;
+    }
+
+    /* ─── Footer ──────────────────────────────── */
+    footer {
+      padding: 48px 0; text-align: center;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+    footer p { font-size: 13px; font-weight: 400; color: var(--text-tertiary); }
+    footer a { color: var(--text-secondary); text-decoration: none; }
+    footer a:hover { color: var(--primary); }
+
+    /* ─── Arch Layers ─────────────────────────── */
+    .arch-layers {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: 1px; margin-top: 40px;
+      background: var(--border); border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .arch-layer { padding: 24px; background: var(--bg-card); }
+    .arch-layer-name {
+      font-size: 11px; font-weight: 600;
+      color: var(--primary); margin-bottom: 10px;
+      display: inline-block;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      font-family: var(--mono);
+    }
+    .arch-layer-desc { font-size: 13px; font-weight: 400; color: var(--text-secondary); line-height: 1.6; }
+    .arch-layer-tech { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .tech-tag {
+      padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;
+      background: rgba(16,185,129,0.06); color: var(--primary);
+      border: 1px solid rgba(16,185,129,0.12);
+      font-family: var(--mono);
+    }
+
+    /* ─── Use Cases ───────────────────────────── */
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px; margin-top: 48px;
+      background: var(--border); border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .use-case-card {
+      padding: 24px; background: var(--bg-card);
+      transition: all 0.2s;
+    }
+    .use-case-card:hover { background: var(--bg-card-hover); }
+    .use-case-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .use-case-icon svg { width: 22px; height: 22px; stroke-width: 1.5; fill: none; }
+    .use-case-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .use-case-card p { font-size: 12px; font-weight: 400; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ─── Logo image ─────────────────────────── */
+    .nav-logo-img { height: 52px; width: auto; display: block; }
+
+    /* ─── Mobile Menu Button ─────────────────── */
+    .nav-menu-btn {
+      display: none; background: none; border: none; cursor: pointer;
+      color: var(--text); font-size: 24px; padding: 8px; line-height: 1;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ─── Global overflow guard ────────────────  */
+    html, body { overflow-x: hidden; max-width: 100vw; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+
+    /* ─── Responsive ──────────────────────────── */
+
+    /* --- Tablet landscape (≤ 1024px) --- */
+    @media (max-width: 1024px) {
+      .container, .container-narrow { padding: 0 24px; }
+      .nav-inner { padding: 0 24px; }
+      .personas-grid { grid-template-columns: repeat(2, 1fr); }
+      .use-case-grid { grid-template-columns: repeat(2, 1fr); }
+      .neo-box { min-width: 180px; }
+      section { padding: 80px 0; }
+      .hero { padding: 140px 0 80px; }
+      .cta-section { padding: 80px 0; }
+      .req-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+
+    /* --- Tablet / arch breakpoint (≤ 900px) --- */
+    @media (max-width: 900px) {
+      .neo-connector-h { transform: rotate(90deg); margin: 20px 0; }
+      .neo-connection-tree { display: none; }
+      .neo-mobile-arrow { display: block; }
+      .neo-row { flex-direction: column; align-items: center; }
+      .neo-box { width: 100%; max-width: 100%; min-width: 0; }
+      .neo-arch-wrapper { padding: 48px 20px 24px; }
+    }
+
+    /* --- Tablet portrait / phone landscape (≤ 768px) --- */
+    @media (max-width: 768px) {
+      .container, .container-narrow { padding: 0 20px; }
+      .nav-inner { padding: 0 16px; }
+
+      /* Hamburger menu */
+      .nav-menu-btn { display: block; }
+      .nav-inner {
+        flex-wrap: wrap;
+      }
+      .nav-links {
+        display: none !important;
+        position: fixed;
+        top: 60px; left: 0; right: 0; bottom: 0;
+        width: 100%; height: calc(100vh - 60px); height: calc(100dvh - 60px);
+        flex-direction: column;
+        align-items: stretch;
+        background: rgba(10,10,10,0.97);
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        padding: 24px 20px; gap: 0;
+        border-top: 1px solid var(--border);
+        overflow-y: auto; z-index: 999;
+      }
+      .nav-links.open {
+        display: flex !important;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .nav-links a {
+        display: block; font-size: 17px; padding: 16px 16px;
+        border-bottom: 1px solid var(--border);
+        border-radius: 0; color: var(--text); width: 100%;
+        text-decoration: none;
+      }
+      .nav-links a:last-child { border-bottom: none; }
+      .nav-links .btn-primary {
+        margin-top: 16px; padding: 16px 16px; text-align: center;
+        font-size: 16px; display: block; border-bottom: none;
+        border-radius: var(--radius-sm);
+      }
+
+      /* Nav logo */
+      .nav-logo-img { height: 44px; }
+
+      /* Hero */
+      .hero { padding: 100px 0 56px; }
+      .hero h1 { font-size: clamp(28px, 8vw, 36px); }
+      .hero-subtitle { font-size: 16px; }
+      .hero-desc { font-size: 14px; margin-bottom: 28px; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .hero-actions .btn { justify-content: center; }
+      .hero-badge {
+        font-size: 11px; padding: 6px 14px;
+        text-align: center; flex-wrap: wrap; justify-content: center;
+      }
+      .hero-stats { flex-direction: column; margin-top: 48px; }
+      .hero-stats .hero-stat { border-bottom: 1px solid var(--border); }
+      .hero-stats .hero-stat:last-child { border-bottom: none; }
+
+      /* Hide forced <br> in titles */
+      .section-title br, .hero h1 br, .cta-section h2 br { display: none; }
+
+      /* Sections */
+      section { padding: 56px 0; }
+      .section-title { margin-bottom: 12px; font-size: clamp(24px, 6vw, 36px); }
+      .section-desc { font-size: 15px; }
+      .cta-section { padding: 56px 0; }
+
+      /* Grids — all single column */
+      .features-grid { grid-template-columns: 1fr !important; }
+      .personas-grid { grid-template-columns: 1fr !important; }
+      .use-case-grid { grid-template-columns: 1fr !important; }
+      .arch-layers { grid-template-columns: 1fr !important; }
+      .stack-grid { grid-template-columns: 1fr !important; }
+      .install-tracks { grid-template-columns: 1fr; }
+      .req-grid { grid-template-columns: 1fr !important; }
+
+      /* Comparison table — card layout on mobile */
+      .comparison-wrapper { overflow-x: hidden; }
+      .comparison-table { min-width: 0; }
+      .comparison-table thead { display: none; }
+      .comparison-table tbody tr {
+        display: flex; flex-direction: column;
+        border-bottom: 1px solid var(--border); padding: 14px 0;
+      }
+      .comparison-table tbody tr:last-child { border-bottom: none; }
+      .comparison-table tbody td {
+        display: block; border-bottom: none; padding: 4px 16px;
+      }
+      .comparison-table tbody td:first-child {
+        font-size: 13px; font-weight: 600; padding-bottom: 6px;
+        color: var(--text);
+      }
+      .comparison-table tbody td:nth-child(2)::before {
+        content: 'Local Global: '; font-weight: 500; color: var(--primary);
+        font-family: var(--mono); font-size: 10px;
+        text-transform: uppercase; letter-spacing: 0.04em;
+      }
+      .comparison-table tbody td:nth-child(3)::before {
+        content: 'Cloud AI: '; font-weight: 500; color: var(--text-tertiary);
+        font-family: var(--mono); font-size: 10px;
+        text-transform: uppercase; letter-spacing: 0.04em;
+      }
+
+      /* Privacy banner */
+      .privacy-banner { flex-direction: column; padding: 20px; }
+
+      /* Cmd block — allow wrapping */
+      .cmd-block { white-space: pre-wrap; word-break: break-all; }
+
+      /* Neo arch */
+      .neo-arch-wrapper { padding: 40px 16px 20px; }
+      .neo-box { min-width: 0; }
+
+      /* CTA */
+      .cta-section h2 { font-size: clamp(24px, 7vw, 36px); }
+    }
+
+    /* --- Small phones (≤ 480px) --- */
+    @media (max-width: 480px) {
+      .container, .container-narrow { padding: 0 16px; }
+      .nav-inner { padding: 0 12px; }
+
+      .nav-logo-img { height: 38px; }
+
+      .hero { padding: 88px 0 40px; }
+      .hero h1 { font-size: clamp(24px, 7.5vw, 32px); }
+      .hero-subtitle { font-size: 15px; }
+      .hero-desc { font-size: 13px; margin-bottom: 24px; }
+      .hero-badge { font-size: 10px; gap: 6px; padding: 5px 12px; margin-bottom: 24px; }
+
+      section { padding: 40px 0; }
+      .cta-section { padding: 40px 0; }
+
+      .btn { padding: 12px 16px; font-size: 14px; width: 100%; justify-content: center; }
+      .btn-sm { padding: 10px 14px; font-size: 13px; }
+      .hero-stat { padding: 14px 16px; }
+      .hero-stat .number { font-size: 22px; }
+      .hero-stat .label { font-size: 10px; }
+
+      .persona-card, .feature-card, .use-case-card { padding: 18px; }
+      .persona-card h3, .feature-card h3 { font-size: 14px; }
+      .use-case-card h4 { font-size: 13px; }
+      .install-track { padding: 18px; }
+      .install-track h3 { font-size: 16px; }
+      .cmd-block { font-size: 11px; padding: 10px 12px; }
+
+      .faq-question { font-size: 13px; padding: 14px 16px; gap: 12px; }
+      .faq-answer-inner { font-size: 12px; padding: 12px 16px 14px; }
+
+      .neo-arch-wrapper { padding: 36px 12px 16px; }
+      .neo-box { padding: 14px; }
+      .neo-box-header { font-size: 11px; gap: 6px; }
+      .neo-box-content { font-size: 11px; }
+      .neo-tag { font-size: 9px; }
+      .neo-arch-badge { font-size: 10px; padding: 4px 10px; }
+
+      .privacy-banner { padding: 16px; gap: 14px; }
+      .privacy-banner-icon { width: 36px; height: 36px; font-size: 18px; }
+      .privacy-banner h4 { font-size: 14px; }
+      .privacy-banner p { font-size: 12px; }
+
+      .stack-item { padding: 12px 16px; gap: 12px; }
+      .stack-icon { width: 32px; height: 32px; font-size: 14px; }
+      .stack-item-name { font-size: 12px; }
+      .stack-item-desc { font-size: 10px; }
+
+      .arch-layer { padding: 18px; }
+      .tech-tag { font-size: 10px; padding: 2px 6px; }
+
+      footer { padding: 28px 0; }
+      footer p { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ NAVIGATION ══════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="assets/logo-wordmark.svg" alt="local-global" class="nav-logo-img">
+    </a>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Toggle menu">
+      <i class="ph ph-list"></i>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="#who">Who It's For</a>
+      <a href="#features">Features</a>
+      <a href="#get-started">Get Started</a>
+      <a href="#faq">FAQ</a>
+      <a href="#download" class="btn-primary"><i class="ph ph-download-simple" style="font-size:13px;"></i> Download</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      free forever · no account needed · works offline · data stored on your mac
+    </div>
+    <h1>A Powerful AI That<br/>Lives on Your Mac</h1>
+    <p class="hero-subtitle">
+      Like ChatGPT, but free, private, and runs entirely on your computer.
+      No subscriptions. No data collection. No internet required.
+    </p>
+    <p class="hero-desc">
+      Write, research, code, learn, brainstorm, translate — all powered by AI
+      models running locally on your Mac. Your conversations never leave your machine.
+    </p>
+    <div class="hero-actions">
+      <a href="#download" class="btn btn-hero">
+        <i class="ph ph-apple-logo"></i> Download for macOS
+      </a>
+      <a href="#get-started" class="btn btn-outline">
+        <i class="ph ph-play-circle"></i> See How It Works
+      </a>
+      <a href="https://github.com/YOUR_USERNAME/local-global" class="btn btn-secondary" target="_blank">
+        <i class="ph ph-github-logo"></i> Source Code
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="number">$0</div>
+        <div class="label">Cost — Free Forever</div>
+      </div>
+      <div class="hero-stat">
+        <div class="number">0</div>
+        <div class="label">Data Sent to Cloud</div>
+      </div>
+      <div class="hero-stat">
+        <div class="number">20+</div>
+        <div class="label">Built-in Features</div>
+      </div>
+      <div class="hero-stat">
+        <div class="number">50+</div>
+        <div class="label">Natural Voices</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WHO IT'S FOR ════════════════════════════════════ -->
+<section id="who">
+  <div class="container">
+    <div class="section-label"><i class="ph ph-users-three"></i> Who It's For</div>
+    <h2 class="section-title">Built for everyone who wants AI<br/>without compromise</h2>
+    <p class="section-desc">
+      Whether you're a student, a professional, a developer, or someone who just wants to try AI without handing over your data — this app is for you.
+    </p>
+
+    <div class="personas-grid">
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(236,72,153,0.12);color:#F472B6;"><i class="ph ph-user"></i></div>
+        <div class="persona-who">Everyday Users</div>
+        <h3>Just Want to Chat with AI</h3>
+        <p>Never used AI before? Perfect. This is the simplest way to get started — no accounts, no sign-ups, no monthly fees.</p>
+        <ul><li>Ask questions about anything</li><li>Get help writing emails and letters</li><li>Brainstorm ideas and plans</li><li>Summarize articles or documents</li></ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(16,185,129,0.12);color:#34D399;"><i class="ph ph-shield-check"></i></div>
+        <div class="persona-who">Privacy-Conscious Users</div>
+        <h3>Keep Your Data Yours</h3>
+        <p>Tired of AI companies training on your conversations? This runs 100% offline. No telemetry, no analytics, no tracking whatsoever.</p>
+        <ul><li>Zero data leaves your computer</li><li>No account or sign-up required</li><li>Delete the app = delete everything</li><li>Discuss sensitive topics freely</li></ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(6,182,212,0.12);color:#22D3EE;"><i class="ph ph-pencil-line"></i></div>
+        <div class="persona-who">Writers & Creatives</div>
+        <h3>Your Private Writing Partner</h3>
+        <p>Draft stories, polish prose, break through writer's block — with an AI that never judges and never leaks your unpublished work.</p>
+        <ul><li>Built-in creative writing persona</li><li>Listen to your text read aloud (50+ voices)</li><li>Export conversations as Markdown</li><li>Branch conversations to explore ideas</li></ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(245,158,11,0.12);color:#FBBF24;"><i class="ph ph-graduation-cap"></i></div>
+        <div class="persona-who">Students & Learners</div>
+        <h3>Study Smarter</h3>
+        <p>Get a patient, judgment-free tutor available 24/7. Ask anything, go at your own pace, and never worry about "dumb questions."</p>
+        <ul><li>Built-in Python & Math tutor personas</li><li>Upload textbooks and notes for Q&A</li><li>ELI5 mode for complex topics</li><li>Works without WiFi (cafés, planes)</li></ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(139,92,246,0.12);color:#A78BFA;"><i class="ph ph-code"></i></div>
+        <div class="persona-who">Developers & Tinkerers</div>
+        <h3>Code, Debug, Extend</h3>
+        <p>A local AI coding tool you can customize. Run any Ollama model, extend with MCP tools, and inspect the C++ source code.</p>
+        <ul><li>Syntax-highlighted code blocks</li><li>MCP tool integration (stdio + HTTP)</li><li>RAG over your codebase docs</li><li>100% open source — hack it your way</li></ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(239,68,68,0.12);color:#F87171;"><i class="ph ph-briefcase"></i></div>
+        <div class="persona-who">Professionals & Businesses</div>
+        <h3>AI Without the Liability</h3>
+        <p>Use AI for your business without worrying about data leaks, compliance violations, or unpredictable subscription costs.</p>
+        <ul><li>No data ever leaves your network</li><li>HIPAA / GDPR friendly by design</li><li>Upload contracts & docs for analysis</li><li>Zero ongoing cost after setup</li></ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(6,182,212,0.12);color:#67E8F9;"><i class="ph ph-books"></i></div>
+        <div class="persona-who">Researchers & Academics</div>
+        <h3>Analyze Without Exposure</h3>
+        <p>Discuss unpublished research, analyze data, and work with sensitive materials without them touching any cloud service.</p>
+        <ul><li>Upload papers as a RAG knowledge base</li><li>Cross-reference multiple documents</li><li>No risk of data appearing in training sets</li><li>Web search for fact-checking</li></ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(245,158,11,0.12);color:#FCD34D;"><i class="ph ph-translate"></i></div>
+        <div class="persona-who">Non-English Speakers</div>
+        <h3>Translation & Language Help</h3>
+        <p>Translate documents, practice a new language, or get help composing messages — all without sharing personal content online.</p>
+        <ul><li>Built-in translator persona</li><li>Practice conversations privately</li><li>Understand idioms and context</li><li>Works with many languages</li></ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-icon" style="background:rgba(16,185,129,0.12);color:#34D399;"><i class="ph ph-rocket-launch"></i></div>
+        <div class="persona-who">Hobbyists & Self-Improvers</div>
+        <h3>Explore, Learn, Build</h3>
+        <p>Curious tinkerers, lifelong learners, and side-project builders — get an AI companion that grows with your interests, free of charge.</p>
+        <ul><li>Ask about any topic endlessly</li><li>Plan side projects and hobbies</li><li>Journal or reflect with AI prompts</li><li>No usage limits or rate caps</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES ════════════════════════════════════════ -->
+<section id="features">
+  <div class="container">
+    <div class="section-label"><i class="ph ph-sparkle"></i> Features</div>
+    <h2 class="section-title">Everything you'd expect from AI,<br/>nothing in the cloud</h2>
+    <p class="section-desc">All the capabilities of premium AI services — chat, voice, document analysis, web search, and more — running entirely on your Mac.</p>
+
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon purple"><i class="ph ph-chat-circle-dots"></i></div><h3>Natural Conversations</h3><p>Chat like you would with ChatGPT. Responses stream in real-time. Organize chats, rename, tag, branch, and search across all your conversations.</p></div>
+      <div class="feature-card"><div class="feature-icon cyan"><i class="ph ph-microphone"></i></div><h3>Read Aloud (50+ Voices)</h3><p>Have any response read aloud with natural-sounding voices in English, Japanese, Chinese, French, Hindi, and more. Pause, resume, and pick the voice you like — all processed locally via Kokoro TTS.</p></div>
+      <div class="feature-card"><div class="feature-icon green"><i class="ph ph-files"></i></div><h3>Upload & Ask Your Documents</h3><p>Drop in PDFs, Word docs, spreadsheets, or text files. The AI reads them and answers questions about their content with cited sources.</p></div>
+      <div class="feature-card"><div class="feature-icon amber"><i class="ph ph-globe"></i></div><h3>Web Search</h3><p>When enabled, the AI can search the web, read pages, and use that information to give you up-to-date answers with sources.</p></div>
+      <div class="feature-card"><div class="feature-icon pink"><i class="ph ph-brain"></i></div><h3>Remembers What Matters</h3><p>The assistant automatically learns and remembers facts about you across conversations — your preferences, projects, and context.</p></div>
+      <div class="feature-card"><div class="feature-icon red"><i class="ph ph-book-open-text"></i></div><h3>10+ Personas</h3><p>Switch between built-in personas — Python tutor, code reviewer, creative writer, translator, summarizer — or create your own custom ones.</p></div>
+      <div class="feature-card"><div class="feature-icon purple"><i class="ph ph-package"></i></div><h3>Choose Your Model</h3><p>Download and switch between AI models right from the app. Smaller models for speed, larger for quality. You choose what runs on your hardware.</p></div>
+      <div class="feature-card"><div class="feature-icon cyan"><i class="ph ph-code"></i></div><h3>Code with Syntax Highlighting</h3><p>Ask coding questions and get beautifully formatted code blocks with syntax highlighting and one-click copy. Supports all major languages.</p></div>
+      <div class="feature-card"><div class="feature-icon green"><i class="ph ph-export"></i></div><h3>Export Everything</h3><p>Export any conversation as Markdown or JSON. Your data is always accessible and portable — never locked in.</p></div>
+      <div class="feature-card" style="border-left:2px solid var(--primary);"><div class="feature-icon green"><i class="ph ph-folder-simple"></i></div><h3>Saved to a Local Folder <span style="font-size:10px;font-weight:600;background:var(--primary);color:#000;padding:2px 7px;border-radius:100px;margin-left:6px;vertical-align:middle;letter-spacing:0.04em;">NEW</span></h3><p>All your conversations, settings, and memories are now stored as plain files in a local folder on your Mac — not in the browser. Easy to back up, inspect, and fully yours.</p></div>
+      <div class="feature-card"><div class="feature-icon amber"><i class="ph ph-wrench"></i></div><h3>Extend with Tools (MCP)</h3><p>For power users: connect external tools via the Model Context Protocol. Give the AI access to your filesystem, APIs, databases, and more.</p></div>
+      <div class="feature-card"><div class="feature-icon pink"><i class="ph ph-keyboard"></i></div><h3>Keyboard First</h3><p>Power shortcuts for everything. ⌘N for new chat, ⌘F to search, ⌘/ to toggle sidebar, Escape to stop generation.</p></div>
+      <div class="feature-card"><div class="feature-icon red"><i class="ph ph-sliders-horizontal"></i></div><h3>Fully Customizable</h3><p>Adjust font size, response creativity, default model, timestamps, and more. Make it feel exactly right for how you work.</p></div>
+    </div>
+
+    <div class="privacy-banner">
+      <div class="privacy-banner-icon"><i class="ph ph-shield-check"></i></div>
+      <div>
+        <h4>Privacy by Architecture — Not by Promise</h4>
+        <p>This isn't a cloud service that <em>promises</em> not to read your data. The AI literally cannot phone home — it binds to localhost only. No telemetry, no analytics, no tracking code. All your conversations and settings are stored as plain files in a local folder on your Mac — easily backed up, totally transparent. Delete the app, and everything is gone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WHY LOCAL > CLOUD ═══════════════════════════════ -->
+<section id="comparison">
+  <div class="container">
+    <div class="section-label"><i class="ph ph-scales"></i> Why Local?</div>
+    <h2 class="section-title">How it compares to cloud AI</h2>
+    <p class="section-desc">Cloud AI services are convenient — but they come with trade-offs. Here's what you get when AI runs on your own machine.</p>
+
+    <div class="comparison-wrapper">
+      <table class="comparison-table">
+        <thead><tr><th style="width:28%;"></th><th style="width:36%;"><i class="ph ph-brain"></i> Local Global</th><th style="width:36%;"><i class="ph ph-cloud"></i> Cloud AI (ChatGPT, etc.)</th></tr></thead>
+        <tbody>
+          <tr><td>Cost</td><td><span class="check">✓</span> Free forever</td><td><span class="cross">✗</span> $20/month (or per-token)</td></tr>
+          <tr><td>Privacy</td><td><span class="check">✓</span> Zero data leaves your Mac</td><td><span class="cross">✗</span> Data stored on company servers</td></tr>
+          <tr><td>Internet Required</td><td><span class="check">✓</span> Works 100% offline</td><td><span class="cross">✗</span> Always needs internet</td></tr>
+          <tr><td>Account Needed</td><td><span class="check">✓</span> No account, no sign-up</td><td><span class="cross">✗</span> Email, phone, payment info</td></tr>
+          <tr><td>Data Training</td><td><span class="check">✓</span> Never used for training</td><td><span class="cross">✗</span> May be used to improve models</td></tr>
+          <tr><td>Censorship</td><td><span class="check">✓</span> No content filters*</td><td><span class="cross">✗</span> Aggressive content filtering</td></tr>
+          <tr><td>Custom Models</td><td><span class="check">✓</span> Run any Ollama model</td><td><span class="cross">✗</span> Limited to what they offer</td></tr>
+          <tr><td>Availability</td><td><span class="check">✓</span> Always available, no outages</td><td><span class="cross">✗</span> Server outages & rate limits</td></tr>
+          <tr><td>Speed</td><td>Depends on your hardware</td><td>Generally faster (data center GPUs)</td></tr>
+          <tr><td>Model Quality</td><td>Good (improving rapidly)</td><td>Currently best-in-class (GPT‑5.2 Pro, etc.)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px; font-size:12px; font-weight:400; color:var(--text-tertiary); font-family:var(--mono);">
+      * Depends on the model you choose. You have full control over what runs on your machine.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════ USE CASES ═══════════════════════════════════════ -->
+<section id="use-cases">
+  <div class="container">
+    <div class="section-label"><i class="ph ph-lightbulb"></i> Use Cases</div>
+    <h2 class="section-title">What people use it for</h2>
+    <p class="section-desc">Real scenarios, real value — all running locally on your Mac.</p>
+
+    <div class="use-case-grid">
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(139,92,246,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#A78BFA"><path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+        </div>
+        <h4>Draft Emails & Messages</h4>
+        <p>Write professional emails, cover letters, and messages. Edit tone, length, and formality without your content touching any server.</p>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(245,158,11,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#FBBF24"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84 51.39 51.39 0 0 0-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg>
+        </div>
+        <h4>Study for Exams</h4>
+        <p>Upload lecture notes and textbooks, then quiz yourself. Get step-by-step explanations of problems you're stuck on.</p>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(6,182,212,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#22D3EE"><path d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"/></svg>
+        </div>
+        <h4>Debug & Write Code</h4>
+        <p>Paste error messages, get explanations and fixes. Generate boilerplate, refactor functions, write tests.</p>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(239,68,68,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#F87171"><path d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+        </div>
+        <h4>Analyze Contracts & Docs</h4>
+        <p>Upload legal documents, invoices, or reports. Ask "what are the key risks?" or "summarize this in plain English" — privately.</p>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(16,185,129,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#34D399"><path d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138A47.63 47.63 0 0 1 15 5.621m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802"/></svg>
+        </div>
+        <h4>Translate Text</h4>
+        <p>Translate paragraphs between languages with context awareness. Understand nuance that simple translators miss.</p>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(236,72,153,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#F472B6"><path d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
+        </div>
+        <h4>Brainstorm & Plan</h4>
+        <p>Use the AI as a thinking partner. Brainstorm startup ideas, plan events, outline articles, or work through decisions.</p>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(139,92,246,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#A78BFA"><path d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/></svg>
+        </div>
+        <h4>Creative Writing</h4>
+        <p>Draft stories, develop characters, get feedback on prose. Your unpublished novel stays on your computer — not in a training set.</p>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(6,182,212,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#22D3EE"><path d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714a2.25 2.25 0 0 0 .659 1.591L19 14.5M14.25 3.104c.251.023.501.05.75.082M19 14.5a2.25 2.25 0 0 1 .75 2.25v.894a2.25 2.25 0 0 1-2.25 2.25h-11A2.25 2.25 0 0 1 4.25 17.65v-.894A2.25 2.25 0 0 1 5 14.5"/></svg>
+        </div>
+        <h4>Research & Papers</h4>
+        <p>Upload research papers into RAG, cross-reference findings, generate literature review drafts. All confidential.</p>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-icon" style="background:rgba(245,158,11,0.12);">
+          <svg viewBox="0 0 24 24" stroke="#FBBF24"><path d="M8.288 15.038a5.25 5.25 0 0 1 7.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 0 1 1.06 0Z"/></svg>
+        </div>
+        <h4>Work Offline Anywhere</h4>
+        <p>No WiFi? No problem. The AI runs entirely locally, so it works perfectly offline — on planes, trains, cafés, or anywhere.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ GET STARTED ═════════════════════════════════════ -->
+<section id="get-started">
+  <div class="container">
+    <div class="section-label"><i class="ph ph-rocket"></i> Get Started</div>
+    <h2 class="section-title">Two ways to install</h2>
+    <p class="section-desc">Choose your path — whether you want a one-click install or prefer to build from source.</p>
+
+    <div class="install-tracks">
+      <div class="install-track easy">
+        <div class="install-track-badge">Recommended</div>
+        <h3>Easy Install</h3>
+        <p>Best for most people. Download the app, install Ollama, and start chatting.</p>
+        <ol>
+          <li>Download the <strong>.app</strong> from the <a href="#download" style="color:var(--primary);font-weight:500;">releases page</a></li>
+          <li>Install <a href="https://ollama.com" target="_blank" style="color:var(--primary);font-weight:500;">Ollama</a> (the free AI engine)</li>
+          <li>Open Ollama and pull a model:<div class="cmd-block">ollama pull llama3.2
+ollama pull gemma3:4b</div></li>
+          <li>Double-click <strong>Local Global.app</strong> — done!</li>
+        </ol>
+        <a href="#download" class="btn btn-hero btn-sm" style="width:100%;justify-content:center;">
+          <i class="ph ph-download-simple"></i> Download App
+        </a>
+      </div>
+      <div class="install-track dev">
+        <div class="install-track-badge">Developers</div>
+        <h3>Build from Source</h3>
+        <p>Full control. Clone, customize, and compile. Requires Homebrew and CMake.</p>
+        <ol>
+          <li>Install prerequisites:<div class="cmd-block">brew install cmake drogon curl jsoncpp</div></li>
+          <li>Install <a href="https://ollama.com" target="_blank" style="color:var(--primary);font-weight:500;">Ollama</a> + pull a model</li>
+          <li>Clone and build:
+<div class="cmd-block">git clone https://github.com/YOUR_USERNAME/local-global.git
+cd local-global/myapp
+mkdir -p build && cd build
+cmake .. && cmake --build .</div>
+          </li>
+          <li>Run the app:
+<div class="cmd-block">./Local\ Global.app/Contents/MacOS/Local\ Global</div>
+          </li>
+        </ol>
+        <a href="https://github.com/YOUR_USERNAME/local-global" class="btn btn-outline btn-sm" target="_blank" style="width:100%;justify-content:center;">
+          <i class="ph ph-github-logo"></i> View Source
+        </a>
+      </div>
+    </div>
+
+    <div style="margin-top:40px; text-align:center;">
+      <p style="font-size:13px; font-weight:400; color:var(--text-tertiary); font-family:var(--mono);">
+        Optional: Enable text-to-speech with 50+ multilingual voices powered by Kokoro TTS (requires Python 3.10+).
+        See the <a href="https://github.com/YOUR_USERNAME/local-global#tts-setup" target="_blank" style="color:var(--primary);font-weight:500;">TTS setup guide</a> for details.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SYSTEM REQUIREMENTS ═════════════════════════════ -->
+<section id="requirements">
+  <div class="container-narrow">
+    <div class="section-label"><i class="ph ph-laptop"></i> System Requirements</div>
+    <h2 class="section-title">What You Need</h2>
+    <p class="section-desc">A modern Mac with a few gigabytes free. That's it.</p>
+    <div class="req-grid" style="margin-top:32px; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden;">
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(239,68,68,0.12);color:#F87171;"><i class="ph ph-desktop"></i></div><div><div class="stack-item-name">macOS 13+</div><div class="stack-item-desc">Ventura or later</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(6,182,212,0.12);color:#22D3EE;"><i class="ph ph-cpu"></i></div><div><div class="stack-item-name">Apple Silicon or Intel</div><div class="stack-item-desc">M1+ recommended for best speed</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(16,185,129,0.12);color:#34D399;"><i class="ph ph-memory"></i></div><div><div class="stack-item-name">8GB+ RAM</div><div class="stack-item-desc">16GB lets you run larger models</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(245,158,11,0.12);color:#FBBF24;"><i class="ph ph-hard-drives"></i></div><div><div class="stack-item-name">5GB Free Disk</div><div class="stack-item-desc">For the app + one AI model</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(139,92,246,0.12);color:#A78BFA;"><i class="ph ph-brain"></i></div><div><div class="stack-item-name">Ollama (Free)</div><div class="stack-item-desc">Required — local AI engine</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(236,72,153,0.12);color:#F472B6;"><i class="ph ph-wifi-slash"></i></div><div><div class="stack-item-name">No Internet Needed</div><div class="stack-item-desc">Works fully offline after setup</div></div></div>
+    </div>
+    <p style="margin-top:24px; font-size:13px; font-weight:400; color:var(--text-tertiary); text-align:center;">
+      <strong>Tip:</strong> On an M1 Mac with 8GB RAM, small models like <code style="background:var(--bg-card);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:12px;border:1px solid var(--border);color:var(--primary);">llama3.2</code> (~2GB) and <code style="background:var(--bg-card);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:12px;border:1px solid var(--border);color:var(--primary);">gemma3:4b</code> (~3GB) run smoothly.
+      With 16GB+, you can run powerful 7B–13B models for better quality responses.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════ ARCHITECTURE ═══════════════════════════════════ -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label"><i class="ph ph-tree-structure"></i> Under the Hood</div>
+    <h2 class="section-title">Architecture & Tech Stack</h2>
+    <p class="section-desc">For the curious and the technical: here's how Local Global is built.</p>
+
+    <div class="neo-arch-wrapper">
+      <div class="neo-arch-badge">macOS Application (.app)</div>
+      <div class="neo-row">
+        <div class="neo-box pink"><div class="neo-box-header"><i class="ph ph-browser"></i> Native Webview</div><div class="neo-box-content">WKWebView rendering the Alpine.js SPA. Handles UI, state, and user interactions.</div><div class="neo-tags"><span class="neo-tag">Alpine.js</span><span class="neo-tag">HTML/CSS</span></div></div>
+        <div class="neo-connector-h"><div class="neo-arrow-group"><span>HTTP</span><div class="neo-line-h"></div><div class="neo-head-r"></div></div><div class="neo-arrow-group"><div class="neo-head-l"></div><div class="neo-line-h"></div><span>WS</span></div></div>
+        <div class="neo-box yellow"><div class="neo-box-header"><i class="ph ph-terminal-window"></i> Drogon C++ Server</div><div class="neo-box-content">High-performance backend (127.0.0.1:8080). WebSocket streams, RAG pipeline, service orchestration.</div><div class="neo-tags"><span class="neo-tag">C++17</span><span class="neo-tag">Drogon</span></div></div>
+      </div>
+      <div class="neo-connection-tree"><div class="neo-trunk"></div><div class="neo-branches"><div class="neo-twig"></div><div class="neo-twig"></div><div class="neo-twig"></div></div></div>
+      <div class="neo-mobile-arrow"><i class="ph ph-arrow-down" style="font-size:24px;"></i></div>
+      <div class="neo-row">
+        <div class="neo-box blue"><div class="neo-box-header"><i class="ph ph-brain"></i> Ollama</div><div class="neo-box-content">Local LLM inference and text embeddings (:11434).</div><div class="neo-tags"><span class="neo-tag">Llama 3</span><span class="neo-tag">Nomic Embed</span></div></div>
+        <div class="neo-box green"><div class="neo-box-header"><i class="ph ph-speaker-high"></i> TTS Server</div><div class="neo-box-content">Python server (:8787) running Kokoro TTS for offline multilingual voice synthesis.</div><div class="neo-tags"><span class="neo-tag">Python</span><span class="neo-tag">ONNX</span><span class="neo-tag">Kokoro</span></div></div>
+        <div class="neo-box purple"><div class="neo-box-header"><i class="ph ph-plugs-connected"></i> MCP Servers</div><div class="neo-box-content">Model Context Protocol servers providing tools and filesystem access.</div><div class="neo-tags"><span class="neo-tag">stdio</span><span class="neo-tag">JSON-RPC</span></div></div>
+      </div>
+    </div>
+
+    <div class="arch-layers">
+      <div class="arch-layer"><div class="arch-layer-name">Presentation</div><div class="arch-layer-desc">Native macOS window with embedded web content. Single-page app with reactive state.</div><div class="arch-layer-tech"><span class="tech-tag">WKWebView</span><span class="tech-tag">Alpine.js</span><span class="tech-tag">Web Audio API</span></div></div>
+      <div class="arch-layer"><div class="arch-layer-name">Application Server</div><div class="arch-layer-desc">High-performance C++ HTTP & WebSocket server with async I/O and streaming.</div><div class="arch-layer-tech"><span class="tech-tag">Drogon</span><span class="tech-tag">C++17</span><span class="tech-tag">libcurl</span></div></div>
+      <div class="arch-layer"><div class="arch-layer-name">Intelligence</div><div class="arch-layer-desc">Local LLM inference, vector embeddings, and approximate nearest neighbor search.</div><div class="arch-layer-tech"><span class="tech-tag">Ollama</span><span class="tech-tag">hnswlib</span><span class="tech-tag">RAG Pipeline</span></div></div>
+      <div class="arch-layer"><div class="arch-layer-name">Voice & Tools</div><div class="arch-layer-desc">Offline TTS synthesis with 50+ multilingual voices and extensible tool use via Model Context Protocol.</div><div class="arch-layer-tech"><span class="tech-tag">Kokoro TTS (ONNX)</span><span class="tech-tag">MCP</span><span class="tech-tag">JSON-RPC 2.0</span></div></div>
+    </div>
+
+    <h3 style="margin-top:56px; font-size:20px; font-weight:600; color:var(--text);">Tech Stack</h3>
+    <div class="stack-grid">
+      <div class="stack-item"><div class="stack-icon" style="font-weight:600;font-size:12px;background:rgba(239,68,68,0.12);color:#F87171;">C++</div><div><div class="stack-item-name">C++17 / Drogon</div><div class="stack-item-desc">Backend server & core logic</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(6,182,212,0.12);color:#22D3EE;"><i class="ph ph-browser"></i></div><div><div class="stack-item-name">Alpine.js 3</div><div class="stack-item-desc">Reactive frontend (no build step)</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(16,185,129,0.12);color:#34D399;"><i class="ph ph-brain"></i></div><div><div class="stack-item-name">Ollama</div><div class="stack-item-desc">Local LLM runtime</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(245,158,11,0.12);color:#FBBF24;"><i class="ph ph-microphone"></i></div><div><div class="stack-item-name">Kokoro TTS</div><div class="stack-item-desc">ONNX multilingual voice synthesis</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(239,68,68,0.12);color:#F87171;"><i class="ph ph-magnifying-glass"></i></div><div><div class="stack-item-name">hnswlib</div><div class="stack-item-desc">Vector search for RAG</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(6,182,212,0.12);color:#22D3EE;"><i class="ph ph-plugs-connected"></i></div><div><div class="stack-item-name">Model Context Protocol</div><div class="stack-item-desc">Extensible tool integration</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(16,185,129,0.12);color:#34D399;"><i class="ph ph-app-window"></i></div><div><div class="stack-item-name">webview/webview</div><div class="stack-item-desc">Native desktop window</div></div></div>
+      <div class="stack-item"><div class="stack-icon" style="background:rgba(245,158,11,0.12);color:#FBBF24;"><i class="ph ph-gear-six"></i></div><div><div class="stack-item-name">CMake</div><div class="stack-item-desc">Build system & packaging</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FAQ ═════════════════════════════════════════════ -->
+<section id="faq">
+  <div class="container-narrow">
+    <div class="section-label"><i class="ph ph-question"></i> FAQ</div>
+    <h2 class="section-title">Common Questions</h2>
+
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Is this really free? What's the catch?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">Yes, 100% free and open source (MIT license). There's no catch — no freemium upsell, no ads, no data harvesting. The app runs AI models on your own hardware, so there are no server costs to pass on to you.</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Do I need to be technical to use this?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">Not at all! The "Easy Install" path just requires downloading two things: the app and Ollama. If you can install a Mac app, you can use this.</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">How good is it compared to ChatGPT?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">It depends on the model you choose. Smaller models (3B–4B parameters) are great for everyday tasks. Larger models (7B–13B) approach the quality of earlier GPT versions. The trade-off is privacy and cost ($0) vs. the absolute cutting edge of cloud AI.</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Will it slow down my Mac?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">The AI model uses your Mac's resources only while generating a response. When idle, the app uses minimal CPU and RAM. On Apple Silicon Macs (M1+), inference is quite efficient thanks to the Neural Engine.</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Can I use it without internet?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">Yes! After the initial setup (downloading the app, Ollama, and a model), everything works 100% offline. The only feature that needs internet is Web Search, which is optional and off by default.</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">What AI models can I use?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">Any model supported by <a href="https://ollama.com/library" target="_blank">Ollama's library</a> — including Llama 3, Gemma, Mistral, Phi, CodeLlama, and many more. We recommend starting with <code>llama3.2</code> for a good balance of quality and speed.</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">What file types can I upload?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">PDF, DOCX, DOC, PPTX, XLSX, XLS, RTF, ODT, EPUB, HTML, XML, and all plain text formats (TXT, CSV, Markdown, source code files, etc.). Just drag and drop.</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Does it work on Windows or Linux?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">Currently macOS only. The underlying architecture (C++ with webview) is cross-platform, so Linux and Windows support could come in the future. Contributions welcome!</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Is my data safe? Where are conversations stored?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">All conversations, settings, and memories are stored as plain JSON files in a local folder on your Mac (<code>app_storage/</code> inside the app bundle's Resources directory). Nothing is sent to the cloud — the backend binds to <code>127.0.0.1</code> (localhost only). You can open, back up, or delete these files at any time. Removing the app removes all data.</div></div></div>
+      <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Can I contribute or report bugs?<i class="ph ph-caret-down"></i></div><div class="faq-answer"><div class="faq-answer-inner">Absolutely! The project is open source on <a href="https://github.com/YOUR_USERNAME/local-global" target="_blank">GitHub</a>. File issues, submit pull requests, or suggest features. All contributions are welcome.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═════════════════════════════════════════════ -->
+<section class="cta-section" id="download">
+  <div class="container">
+    <h2>Ready to Own Your AI?</h2>
+    <p>Free. Private. Offline. No account needed. Download and start chatting in under 5 minutes.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;">
+      <a href="https://github.com/YOUR_USERNAME/local-global/releases" class="btn btn-hero">
+        <i class="ph ph-download-simple"></i> Download Latest Release
+      </a>
+      <a href="https://github.com/YOUR_USERNAME/local-global" class="btn btn-outline" target="_blank">
+        <i class="ph ph-github-logo"></i> View Source Code
+      </a>
+    </div>
+    <p style="margin-top:24px;font-size:13px;font-weight:400;color:var(--text-tertiary);background:transparent;border:none;box-shadow:none;padding:0;position:relative;z-index:1;font-family:var(--mono);">
+      Requires macOS 13+ and <a href="https://ollama.com" target="_blank" style="color:var(--primary);font-weight:500;">Ollama</a> (also free)
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ══════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <p>
+      Built with ❤️ using C++, Alpine.js, and Ollama. 100% open source.
+      <br/>
+      <a href="https://github.com/YOUR_USERNAME/local-global">GitHub</a> ·
+      <a href="ARCHITECTURE.md">Architecture Docs</a> ·
+      MIT License
+    </p>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); });
+
+  /* Mobile menu toggle */
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+
+  function closeMenu() {
+    navLinks.classList.remove('open');
+    menuBtn.querySelector('i').className = 'ph ph-list';
+    document.body.style.overflow = '';
+  }
+
+  function openMenu() {
+    navLinks.classList.add('open');
+    menuBtn.querySelector('i').className = 'ph ph-x';
+    document.body.style.overflow = 'hidden';
+  }
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (navLinks.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  /* Close menu when clicking a link */
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => { closeMenu(); });
+  });
+
+  /* Close menu when clicking outside */
+  document.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('open') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  /* Close menu on resize back to desktop */
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+
+  /* Smooth scroll for anchor links */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      closeMenu();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.feature-card, .persona-card, .arch-layer, .stack-item, .use-case-card, .faq-item').forEach(el => {
+    el.style.opacity = '0'; el.style.transform = 'translateY(12px)'; el.style.transition = 'opacity 0.4s ease, transform 0.4s ease'; observer.observe(el);
+  });
+</script>
+</body>
+</html>

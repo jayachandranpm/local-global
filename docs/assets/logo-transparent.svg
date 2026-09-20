@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!--
+    Local Global — Transparent Logo Mark (no background)
+    For use on light or dark backgrounds, websites, docs, etc.
+  -->
+  <defs>
+    <linearGradient id="t-ring1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="t-ring2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="t-ring3" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6EE7B7" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="t-core" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer orbital ring -->
+  <ellipse cx="256" cy="256" rx="210" ry="80" transform="rotate(-30 256 256)"
+    stroke="url(#t-ring3)" stroke-width="3.5" fill="none"/>
+
+  <!-- Middle orbital ring -->
+  <ellipse cx="256" cy="256" rx="182" ry="72" transform="rotate(25 256 256)"
+    stroke="url(#t-ring2)" stroke-width="5" fill="none"/>
+
+  <!-- Inner orbital ring -->
+  <ellipse cx="256" cy="256" rx="152" ry="64" transform="rotate(-55 256 256)"
+    stroke="url(#t-ring1)" stroke-width="7" fill="none"/>
+
+  <!-- Central node glow -->
+  <circle cx="256" cy="256" r="48" fill="#10B981" opacity="0.1"/>
+  <circle cx="256" cy="256" r="38" fill="#10B981" opacity="0.18"/>
+  <!-- Core -->
+  <circle cx="256" cy="256" r="30" fill="url(#t-core)"/>
+  <!-- Highlight -->
+  <circle cx="249" cy="249" r="11" fill="#6EE7B7" opacity="0.45"/>
+
+  <!-- Satellite nodes -->
+  <circle cx="388" cy="118" r="11" fill="#34D399"/>
+  <circle cx="388" cy="118" r="6" fill="#6EE7B7"/>
+
+  <circle cx="118" cy="388" r="8.5" fill="#10B981"/>
+  <circle cx="118" cy="388" r="4" fill="#34D399"/>
+
+  <circle cx="430" cy="310" r="7" fill="#059669"/>
+  <circle cx="430" cy="310" r="3.5" fill="#10B981"/>
+
+  <circle cx="136" cy="178" r="6" fill="#34D399" opacity="0.7"/>
+  <circle cx="136" cy="178" r="3" fill="#6EE7B7" opacity="0.7"/>
+</svg>
