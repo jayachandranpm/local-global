@@ -2,7 +2,7 @@
 
 Local Global is a native macOS assistant built around Ollama. Conversations, document retrieval, speech, model management, and tool use run from a local C++ service and an embedded desktop interface.
 
-![Local Global running natively on macOS](assets/local-global.png)
+<img src="assets/local-global.jpg" alt="Local Global answering a question about trustworthy local-first software" width="100%">
 
 ## Highlights
 
@@ -18,4 +18,3 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the implementation map and setup deta
 ## Local-only files
 
 Model weights, indexed documents, conversation data, generated configuration, MCP endpoints, build products, and virtual environments are intentionally excluded. Create `myapp/mcp_servers.json` locally if you want to configure tools.
-

@@ -1,5 +1,6 @@
 .DS_Store
 .vscode/
+.cache/
 build/
 cmake-build-*/
 myapp/mcp_servers.json
@@ -11,4 +12,3 @@ rag_storage/
 *.dmg
 *.log
 __pycache__/
-
